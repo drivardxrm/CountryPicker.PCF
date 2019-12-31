@@ -1,7 +1,7 @@
 import * as React from 'react';
 import  { useState } from 'react';
 import { ComboBox, IComboBoxOption,IComboBox} from 'office-ui-fabric-react/lib/index'; 
-import { ImageIcon } from 'office-ui-fabric-react/lib/Icon';
+import { ImageIcon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { initializeIcons } from '@uifabric/icons';
 
 
@@ -25,9 +25,10 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     }
 
     //const [countryname, setCountryName] = useState(props.countryname);
-    //const [countrykey, setCountryKey] = useState(getSelectedKey(props.countryname));
-    const [countrykey, setCountryKey] = useState(undefined);
+    
+    //const [countrykey, setCountryKey] = useState(undefined);
     const [options, setOptions] = useState(INITIAL_OPTIONS); //todo fetch data from api
+    const [countrykey, setCountryKey] = useState(getSelectedKey(props.countryname));
 
     
 
@@ -37,7 +38,8 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
             //var newValue = option.key; 
             //setCountryKey(option.key)
             console.log(index + "-" + option.key + "-" + option.text); 
-            props.onChange(option.text)
+            setCountryKey(option.key);
+            props.onChange(option.text);
             
         }  
     } 
@@ -60,6 +62,11 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
     }
 
+    const buttonIconProps = ():IIconProps | undefined  => {
+        return countrykey != undefined ? 
+            {imageProps:{src:"https://restcountries.eu/data/" + countrykey.toString().toLowerCase() + ".svg",width:25,height:17}} :
+            undefined
+    }
 
 
     initializeIcons();
@@ -69,14 +76,14 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         <ComboBox
 
 
-            //buttonIconProps={countrykey !== undefined ? {imageProps:{src:"https://restcountries.eu/data/" + countrykey + ".svg",width:25,height:17}} : undefined}
+            buttonIconProps={buttonIconProps()}
             onRenderOption={onRenderOption}
 
             
             onChange={onComboboxChanged} 
             
             selectedKey={countrykey}
-            allowFreeform={false}
+            allowFreeform={true}
             autoComplete='on'
             options={options}
         />
