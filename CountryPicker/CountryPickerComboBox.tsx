@@ -1,8 +1,9 @@
 import * as React from 'react';
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import { ComboBox, IComboBoxOption,IComboBox} from 'office-ui-fabric-react/lib/index'; 
 import { ImageIcon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import { initializeIcons } from '@uifabric/icons';
+import useFetch from 'use-http'
 
 
 const INITIAL_OPTIONS: IComboBoxOption[] = [
@@ -15,6 +16,14 @@ const INITIAL_OPTIONS: IComboBoxOption[] = [
 export interface ICountryPickerComboBoxProps {
     countryname: string;
     onChange: (countryname:string) => void;
+}
+
+
+
+
+export interface FetchedCountry {
+    alpha3Code : string,
+    name: string
 }
 
 const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
@@ -30,7 +39,21 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     const [options, setOptions] = useState(INITIAL_OPTIONS); //todo fetch data from api
     const [countrykey, setCountryKey] = useState(getSelectedKey(props.countryname));
 
-    
+    const { loading, error, data } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) // onMount (GET by default)
+   
+    useEffect(() => {
+        if(data && !error)
+        {
+            debugger;
+            //var fetchedcountries = data as FetchedCountry[];
+
+            //@ts-ignore
+            let comboboxoptions:IComboBoxOption[] = Array.from(data, i => { return {key:i.alpha3Code,text:i.name, data: { flag:"https://restcountries.eu/data/" + i.alpha3Code.toString().toLowerCase() + ".svg" }}});
+            setOptions(comboboxoptions)
+            //var countries =  data.map(item => { key: item.alp, text: 'Afghanistan' , data: { flag:"https://restcountries.eu/data/afg.svg" } })
+        }
+      }, [data]);
+
 
     const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined,value? : string | undefined) => { 
         if(option)
@@ -70,26 +93,31 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
 
     initializeIcons();
-    return (
-        
-       
-        <ComboBox
 
+    if(loading){
+        return <div>Loading...</div>
+    }if(error){
+        return <div>Error fetching data...</div>
+    }else{
+        return (
 
-            buttonIconProps={buttonIconProps()}
-            onRenderOption={onRenderOption}
-
-            
-            onChange={onComboboxChanged} 
-            
-            selectedKey={countrykey}
-            allowFreeform={true}
-            autoComplete='on'
-            options={options}
-        />
-
-
-    );
+            <ComboBox
+    
+    
+                buttonIconProps={buttonIconProps()}
+                onRenderOption={onRenderOption}
+    
+                
+                onChange={onComboboxChanged} 
+                
+                selectedKey={countrykey}
+                allowFreeform={true}
+                autoComplete='on'
+                options={options}
+            />
+        );
+    }
+    
   
 }
 
