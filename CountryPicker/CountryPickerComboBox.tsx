@@ -18,6 +18,7 @@ const iconClass = mergeStyles({
 export interface ICountryPickerComboBoxProps {
     countryname: string;
     language: "en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa";
+    promoted: string[]|undefined;
     onChange: (countryname:string|undefined) => void;
 }
 
@@ -56,7 +57,13 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         if(data && !error)
         { 
             let countries = data as Country[];
-            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {key:i.alpha3Code,text:getCountryName(i,props.language)}});
+            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {
+                                                                                            key:i.alpha3Code,
+                                                                                            text:getCountryName(i,props.language),
+                                                                                        }
+                                                                                });
+            
+            comboboxoptions.sort(sortByPromoted)
             setOptions(comboboxoptions);
             console.log("Options were set!");
         }
@@ -83,32 +90,50 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     const getCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa"):string => {
         switch (language){
             case "en":
-                return country.name;
+                return country.name;          
             case "de":
-                return country.translations.de;
-            case "de":
-                return country.translations.de;
+                return country.translations.de ?? country.name;
             case "es":
-                return country.translations.es;
+                return country.translations.es ?? country.name;
             case "fr":
-                return country.translations.fr;
+                return country.translations.fr ?? country.name;
             case "ja":
-                return country.translations.ja;
+                return country.translations.ja ?? country.name;
             case "it":
-                return country.translations.it;
+                return country.translations.it ?? country.name;
             case "br":
-                return country.translations.br;
+                return country.translations.br ?? country.name;
             case "pt":
-                return country.translations.pt;
+                return country.translations.pt ?? country.name;
             case "nl":
-                return country.translations.nl;
+                return country.translations.nl ?? country.name;
             case "fa":
-                return country.translations.fa;
+                return country.translations.fa ?? country.name;
             default:
                 return country.name;
         }
     }
-    
+
+    //Checks if a specified country must be promoted in the list
+    // const isPromoted = (countrykey:string):boolean 
+    //     => props.promoted?.includes(countrykey) ?? false;
+    const sortByPromoted = (a:IComboBoxOption,b:IComboBoxOption):number => {
+        let ranka = promotedRank(a.key);
+        let rankb = promotedRank(b.key);
+           
+        if (ranka > rankb) return 1;
+        if (rankb > ranka) return -1;
+
+        return 0;
+    }
+
+    const promotedRank = (countrykey:string | number):Number => {
+        //debugger;
+        var last = props.promoted?.length ?? 0;
+        var rank = props.promoted?.indexOf(countrykey.toString()) ?? last;
+        return rank < 0 ? last : rank;
+    }
+        
     
 
     const renderFlagIcon = ():JSX.Element | undefined  => {

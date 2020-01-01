@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 import {ComboExample} from "./TestComponent";
 import App from "./StateHook";
 import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPickerComboBox"
+import { strict } from "assert";
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
@@ -11,7 +12,12 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
-	private _props: ICountryPickerComboBoxProps = { countryname: "",language:"en", onChange : this.notifyChange.bind(this)};
+	private _props: ICountryPickerComboBoxProps = { 
+													countryname: "",
+													language:"en", 
+													promoted:undefined,
+													onChange : this.notifyChange.bind(this)
+												};
 
 	/**
 	 * Empty constructor.
@@ -58,7 +64,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 		this._props.countryname = this._selected;
 		this._props.language = context.parameters.language.raw || "en";
-		
+		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
+
 		// Add code to update control view
 		ReactDOM.render(
 			React.createElement(CountryPickerComboBox,this._props)

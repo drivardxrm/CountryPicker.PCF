@@ -17,6 +17,8 @@
       <value name="fa" display-name-key="fa" description-key="Arabic">fa</value>
 
     </property>
+    <property name="promoted" display-name-key="Promoted" description-key="Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'" of-type="SingleLine.Text" usage="input" />
+
 
     <resources>
       <code path="index.ts" order="1"/>
