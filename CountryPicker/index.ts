@@ -7,11 +7,11 @@ import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPicke
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
-	private _selected: string;
+	private _selected: string|undefined;
 
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
-	private _props: ICountryPickerComboBoxProps = { countryname: "", onChange : this.notifyChange.bind(this)};
+	private _props: ICountryPickerComboBoxProps = { countryname: "",language:"en", onChange : this.notifyChange.bind(this)};
 
 	/**
 	 * Empty constructor.
@@ -37,9 +37,11 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 
 		container.appendChild(this._container);
+
+		
 	}
 
-	private notifyChange(selected: string) {
+	private notifyChange(selected: string|undefined) {
 		
 		this._selected = selected;
 		this._notifyOutputChanged();
@@ -53,16 +55,13 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
 		this._selected = context.parameters.country.raw || "";
+
 		this._props.countryname = this._selected;
+		this._props.language = context.parameters.language.raw || "en";
+		
 		// Add code to update control view
 		ReactDOM.render(
-			//React.createElement(App)
 			React.createElement(CountryPickerComboBox,this._props)
-			//countrypicker
-			//React.createElement(DropdownBasicExample, this._props)
-			//React.createElement(ComboExample,undefined)
-			//React.createElement(CountrySelector, this._props)
-
 			, this._container
 		);
 	}

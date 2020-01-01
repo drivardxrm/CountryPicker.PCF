@@ -3,7 +3,21 @@
   <control namespace="XrmVision" constructor="CountryPicker" version="1.0.0" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="country" display-name-key="Country" description-key="Country field" of-type="SingleLine.Text" usage="bound" required="true" />
-    
+    <property name="language" display-name-key="Language" description-key="Base language for country names" of-type="Enum" usage="input" required="true">
+      <value name="en" display-name-key="en" description-key="English" default="true">en</value>
+      <value name="de" display-name-key="de" description-key="German">de</value>
+      <value name="es" display-name-key="es" description-key="Spanish">es</value>
+      <value name="fr" display-name-key="fr" description-key="French">fr</value>
+      <value name="ja" display-name-key="ja" description-key="Japanese">ja</value>
+      <value name="it" display-name-key="it" description-key="Italian">it</value>
+      <value name="br" display-name-key="br" description-key="Brazilian">br</value>
+      <value name="pt" display-name-key="pt" description-key="Portugese">pt</value>
+      <value name="nl" display-name-key="nl" description-key="Dutch">nl</value>
+      <value name="hr" display-name-key="hr" description-key="??">hr</value>
+      <value name="fa" display-name-key="fa" description-key="Arabic">fa</value>
+
+    </property>
+
     <resources>
       <code path="index.ts" order="1"/>
       <!-- UNCOMMENT TO ADD MORE RESOURCES
