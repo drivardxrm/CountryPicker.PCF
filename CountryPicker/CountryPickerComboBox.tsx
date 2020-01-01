@@ -42,35 +42,60 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return selectedOption.length === 0 ? undefined : selectedOption[0].key;
     }
 
+    const getSelectedCountry = (countrykey:string|number) : Country | {} => {
+        var countries = data as Country[];
+        
+        var selectedCountry = countries.filter(c => c.alpha3Code === countrykey);
+        console.log("from method " + selectedCountry[0].capital);
+        return selectedCountry.length === 0 ? {} : selectedCountry[0];
+    }
+
     const [options, setOptions] = useState(DUMMY_OPTIONS);
     const [countrykey, setCountryKey] = useState(getSelectedKey(props.countryname));
+    const [selectedCountry, setSelectedCountry] = useState<Country|{}>({});
 
-    const { loading, error, data } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) 
+    const { loading, error, data  } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) 
    
+    useEffect(() => {
+        console.log("initialize");
+        initializeIcons();
+    }, []); //will happen only once = contructor
+
     useEffect(() => {
         if(data && !error)
         {
-            debugger;
-            //var fetchedcountries = data as FetchedCountry[];
-
-            
+           
             let countries = data as Country[];
-            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {key:i.alpha3Code,text:i.name, data: { flag:"https://restcountries.eu/data/" + i.alpha3Code.toString().toLowerCase() + ".svg" }}});
-            setOptions(comboboxoptions)
-            //var countries =  data.map(item => { key: item.alp, text: "Afghanistan" , data: { flag:"https://restcountries.eu/data/afg.svg" } })
+            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {key:i.alpha3Code,text:i.name}});
+            setOptions(comboboxoptions);
+            console.log("Options were set!");
         }
       }, [data]);
+
+    useEffect(() => {
+        if(countrykey && data && !error)
+        {
+            console.log("Before setSelectedCountry : " + countrykey)
+            setSelectedCountry(getSelectedCountry(countrykey));
+            console.log("Capital : " + (selectedCountry as Country).capital)
+            
+        }else{
+            setSelectedCountry({});
+        }
+    }, [countrykey]);
+
+
 
 
     const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined,value? : string | undefined) => { 
         if(option)
         {
-            //var newValue = option.key; 
-            //setCountryKey(option.key)
             console.log(index + "-" + option.key + "-" + option.text); 
             setCountryKey(option.key);
             props.onChange(option.text);
             
+        }else{
+            //clear
         }  
     } 
   
@@ -79,8 +104,8 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return (
         <div>
 
-            {option && option.data && option.data.flag && (
-                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:option.data.flag,width:25,height:17}} aria-hidden="true"/>
+            {option && option.key && (
+                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:getFlagUrl(option.key),width:25,height:17}} aria-hidden="true"/>
             )}
 
             {option && option.text && (
@@ -92,21 +117,19 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
     }
 
-    const getFlagUrl = ():string => 
-        "https://restcountries.eu/data/" + countrykey?.toString().toLowerCase() + ".svg"
-    
-
+    const getFlagUrl = (key:string|number|undefined):string => 
+        "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
     
 
     const renderFlagIcon = ():JSX.Element | undefined  => {
         return countrykey != undefined ? 
-             <ImageIcon className={iconClass} imageProps={{src:getFlagUrl(),width:46,height:30}}/>
+             <ImageIcon className={iconClass} imageProps={{src:getFlagUrl(countrykey),width:46,height:30}}/>
             :
             <FontIcon iconName="GlobeFavorite" className={iconClass} />
     }
 
 
-    initializeIcons();
+
 
     if(loading){
         return <div>Loading...</div>
