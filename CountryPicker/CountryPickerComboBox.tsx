@@ -1,16 +1,25 @@
-import * as React from 'react';
-import  { useState, useEffect } from 'react';
-import { ComboBox, IComboBoxOption,IComboBox} from 'office-ui-fabric-react/lib/index'; 
-import { ImageIcon, IIconProps } from 'office-ui-fabric-react/lib/Icon';
-import { initializeIcons } from '@uifabric/icons';
-import useFetch from 'use-http'
+import * as React from "react";
+import  { useState, useEffect } from "react";
+import { Stack, Image, IconButton, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
+import { FontIcon, ImageIcon, IIconProps } from "office-ui-fabric-react/lib/Icon";
+import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
+import { initializeIcons } from "@uifabric/icons";
+import useFetch from "use-http"
+import {Country,Translations,Currency,Language,RegionalBloc} from "./Country"
 
+const iconClass = mergeStyles({
+    fontSize: 30,
+    height: 30,
+    width: 50,
+    margin: "1px"
+});
 
-const INITIAL_OPTIONS: IComboBoxOption[] = [
-  { key: 'AFG', text: 'Afghanistan' , data: { flag:"https://restcountries.eu/data/afg.svg" } },  
-  { key: 'ALA', text: 'Åland Islands' , data: { flag:"https://restcountries.eu/data/ala.svg" } },  
-  { key: 'ALB', text: 'Albania' , data: { flag:"https://restcountries.eu/data/alb.svg" } },
-  { key: 'CAN', text: 'Canada' , data: { flag:"https://restcountries.eu/data/can.svg" } }
+//DUMMY
+const DUMMY_OPTIONS: IComboBoxOption[] = [
+  { key: "AFG", text: "Afghanistan" },  
+  { key: "ALA", text: "Åland Islands" },  
+  { key: "ALB", text: "Albania"  },
+  { key: "CAN", text: "Canada" }
 ];
 
 export interface ICountryPickerComboBoxProps {
@@ -33,13 +42,10 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return selectedOption.length === 0 ? undefined : selectedOption[0].key;
     }
 
-    //const [countryname, setCountryName] = useState(props.countryname);
-    
-    //const [countrykey, setCountryKey] = useState(undefined);
-    const [options, setOptions] = useState(INITIAL_OPTIONS); //todo fetch data from api
+    const [options, setOptions] = useState(DUMMY_OPTIONS);
     const [countrykey, setCountryKey] = useState(getSelectedKey(props.countryname));
 
-    const { loading, error, data } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) // onMount (GET by default)
+    const { loading, error, data } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) 
    
     useEffect(() => {
         if(data && !error)
@@ -47,10 +53,11 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
             debugger;
             //var fetchedcountries = data as FetchedCountry[];
 
-            //@ts-ignore
-            let comboboxoptions:IComboBoxOption[] = Array.from(data, i => { return {key:i.alpha3Code,text:i.name, data: { flag:"https://restcountries.eu/data/" + i.alpha3Code.toString().toLowerCase() + ".svg" }}});
+            
+            let countries = data as Country[];
+            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {key:i.alpha3Code,text:i.name, data: { flag:"https://restcountries.eu/data/" + i.alpha3Code.toString().toLowerCase() + ".svg" }}});
             setOptions(comboboxoptions)
-            //var countries =  data.map(item => { key: item.alp, text: 'Afghanistan' , data: { flag:"https://restcountries.eu/data/afg.svg" } })
+            //var countries =  data.map(item => { key: item.alp, text: "Afghanistan" , data: { flag:"https://restcountries.eu/data/afg.svg" } })
         }
       }, [data]);
 
@@ -73,7 +80,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         <div>
 
             {option && option.data && option.data.flag && (
-                <ImageIcon style={{ marginRight: '8px', width:25, height:17 }} imageProps={{src:option.data.flag,width:25,height:17}} aria-hidden="true"/>
+                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:option.data.flag,width:25,height:17}} aria-hidden="true"/>
             )}
 
             {option && option.text && (
@@ -85,10 +92,17 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
     }
 
-    const buttonIconProps = ():IIconProps | undefined  => {
+    const getFlagUrl = ():string => 
+        "https://restcountries.eu/data/" + countrykey?.toString().toLowerCase() + ".svg"
+    
+
+    
+
+    const renderFlagIcon = ():JSX.Element | undefined  => {
         return countrykey != undefined ? 
-            {imageProps:{src:"https://restcountries.eu/data/" + countrykey.toString().toLowerCase() + ".svg",width:25,height:17}} :
-            undefined
+             <ImageIcon className={iconClass} imageProps={{src:getFlagUrl(),width:46,height:30}}/>
+            :
+            <FontIcon iconName="GlobeFavorite" className={iconClass} />
     }
 
 
@@ -100,21 +114,19 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Error fetching data...</div>
     }else{
         return (
-
-            <ComboBox
-    
-    
-                buttonIconProps={buttonIconProps()}
-                onRenderOption={onRenderOption}
-    
-                
-                onChange={onComboboxChanged} 
-                
-                selectedKey={countrykey}
-                allowFreeform={true}
-                autoComplete='on'
-                options={options}
-            />
+            
+            <Stack tokens={{ childrenGap: 2 }} horizontal>
+                {renderFlagIcon()}
+              
+                <VirtualizedComboBox
+                    onRenderOption={onRenderOption}
+                    onChange={onComboboxChanged}          
+                    selectedKey={countrykey}
+                    allowFreeform={true}
+                    autoComplete="on"
+                    options={options}
+                />
+            </Stack>           
         );
     }
     
