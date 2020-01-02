@@ -1,7 +1,8 @@
 import * as React from "react";
-import  { useState, useEffect } from "react";
-import { Stack, Image, IconButton, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
-import { FontIcon, ImageIcon, IIconProps } from "office-ui-fabric-react/lib/Icon";
+import { useState, useEffect } from "react";
+import { Stack, IconButton, Panel, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
+import { useConstCallback } from '@uifabric/react-hooks';
+import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { initializeIcons } from "@uifabric/icons";
 import useFetch from "use-http"
@@ -19,6 +20,7 @@ export interface ICountryPickerComboBoxProps {
     countryname: string;
     language: "en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa";
     promoted: string[]|undefined;
+    limit: string[]|undefined;
     onChange: (countryname:string|undefined) => void;
 }
 
@@ -42,6 +44,10 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     const [options, setOptions] = useState<IComboBoxOption[]>([]);
     const [countrykey, setCountryKey] = useState<string|number|undefined>(getSelectedKey(props.countryname));
     const [selectedCountry, setSelectedCountry] = useState<Country|undefined>(undefined);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    const openPanel = useConstCallback(() => setIsOpen(true));
+    const dismissPanel = useConstCallback(() => setIsOpen(false));
 
     //FETCH HOOK
     const { loading, error, data  } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) 
@@ -57,13 +63,25 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         if(data && !error)
         { 
             let countries = data as Country[];
-            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {
+            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { 
+                                                                                        return {
                                                                                             key:i.alpha3Code,
                                                                                             text:getCountryName(i,props.language),
                                                                                         }
                                                                                 });
-            
+            //filter if limit                                                                     
+            if(props.limit){
+                comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
+            }
+
+
+            //sort by country name
             comboboxoptions.sort(sortByPromoted)
+            //sort if promoted
+            if(props.promoted){
+                comboboxoptions.sort(sortByPromoted)
+            }
+            
             setOptions(comboboxoptions);
             console.log("Options were set!");
         }
@@ -114,9 +132,15 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         }
     }
 
-    //Checks if a specified country must be promoted in the list
-    // const isPromoted = (countrykey:string):boolean 
-    //     => props.promoted?.includes(countrykey) ?? false;
+    //Sort functions for combobox options
+    const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
+
+        if (a.text > b.text) return 1;
+        if (b.text > a.text) return -1;
+
+        return 0;
+    }
+
     const sortByPromoted = (a:IComboBoxOption,b:IComboBoxOption):number => {
         let ranka = promotedRank(a.key);
         let rankb = promotedRank(b.key);
@@ -183,19 +207,33 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Error fetching data...</div>
     }else{
         return (
-            
-            <Stack tokens={{ childrenGap: 2 }} horizontal>
-                {renderFlagIcon()}
-              
-                <VirtualizedComboBox
-                    onRenderOption={onRenderOption}
-                    onChange={onComboboxChanged}          
-                    selectedKey={countrykey}
-                    allowFreeform={true}
-                    autoComplete="on"
-                    options={options}
-                />
-            </Stack>           
+            <div>
+                <Stack tokens={{ childrenGap: 2 }} horizontal>
+                    {renderFlagIcon()}
+                    
+                    <VirtualizedComboBox
+                        onRenderOption={onRenderOption}
+                        onChange={onComboboxChanged}          
+                        selectedKey={countrykey}
+                        allowFreeform={true}
+                        autoComplete="on"
+                        options={options}
+                        style={{width:"100%"}}
+                    />
+
+                    <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={countrykey == undefined} onClick={openPanel} />
+                </Stack>
+                <Panel
+                        headerText={selectedCountry?.name}
+                        isOpen={isOpen}
+                        onDismiss={dismissPanel}
+                        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
+                        closeButtonAriaLabel="Close"
+                    >
+                    <span>Capital : {selectedCountry?.capital}</span>
+                </Panel>
+            </div>
+                       
         );
     }
     

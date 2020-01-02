@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="XrmVision" constructor="CountryPicker" version="1.0.0" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard">
+  <control namespace="XrmVision" constructor="CountryPicker" version="1.0.1" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="country" display-name-key="Country" description-key="Country field" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="language" display-name-key="Language" description-key="Base language for country names" of-type="Enum" usage="input" required="true">
@@ -17,7 +17,9 @@
       <value name="fa" display-name-key="fa" description-key="Arabic">fa</value>
 
     </property>
+
     <property name="promoted" display-name-key="Promoted" description-key="Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'" of-type="SingleLine.Text" usage="input" />
+    <property name="limit" display-name-key="Limit" description-key="Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'" of-type="SingleLine.Text" usage="input" />
 
 
     <resources>
