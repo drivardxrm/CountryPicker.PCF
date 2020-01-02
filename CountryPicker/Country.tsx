@@ -61,6 +61,12 @@ export interface Country {
 }
 
 //Utility functions
+export const GetCountry = (countries:Country[],countrykey:string|number) : Country | undefined => {
+        
+    var selectedCountry = countries.filter(c => c.alpha3Code === countrykey);
+    return selectedCountry.length === 0 ? undefined : selectedCountry[0];
+}
+
 export const GetFlagUrl = (key:string|number|undefined):string => 
         "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
 

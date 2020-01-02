@@ -1,10 +1,8 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {ComboExample} from "./TestComponent";
-import App from "./StateHook";
 import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPickerComboBox"
-import { strict } from "assert";
+
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
