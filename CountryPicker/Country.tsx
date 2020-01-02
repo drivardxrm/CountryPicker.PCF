@@ -60,5 +60,36 @@ export interface Country {
     cioc: string;
 }
 
+//Utility functions
+export const GetFlagUrl = (key:string|number|undefined):string => 
+        "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
+
+export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa"):string => {
+    switch (language){
+        case "en":
+            return country.name;          
+        case "de":
+            return country.translations.de ?? country.name;
+        case "es":
+            return country.translations.es ?? country.name;
+        case "fr":
+            return country.translations.fr ?? country.name;
+        case "ja":
+            return country.translations.ja ?? country.name;
+        case "it":
+            return country.translations.it ?? country.name;
+        case "br":
+            return country.translations.br ?? country.name;
+        case "pt":
+            return country.translations.pt ?? country.name;
+        case "nl":
+            return country.translations.nl ?? country.name;
+        case "fa":
+            return country.translations.fa ?? country.name;
+        default:
+            return country.name;
+    }
+}
+
 
 

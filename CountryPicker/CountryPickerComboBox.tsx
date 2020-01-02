@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Stack, IconButton, Panel, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
+import { Stack, Image, IconButton, Panel, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
 import { useConstCallback } from '@uifabric/react-hooks';
 import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { initializeIcons } from "@uifabric/icons";
 import useFetch from "use-http"
-import {Country,Translations,Currency,Language,RegionalBloc} from "./Country"
+import {Country,Translations,Currency,Language,RegionalBloc, GetFlagUrl, GetCountryName} from "./Country"
 
 const iconClass = mergeStyles({
     fontSize: 30,
@@ -15,12 +15,24 @@ const iconClass = mergeStyles({
     margin: "1px"
 });
 
+const smallIconClass = mergeStyles({
+    fontSize: 17,
+ 
+    width: 20,
+
+});
+
+const bold = mergeStyles({
+    fontWeight: "bold",
+});
+
 
 export interface ICountryPickerComboBoxProps {
     countryname: string;
     language: "en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa";
     promoted: string[]|undefined;
     limit: string[]|undefined;
+    displayinfo : boolean;
     onChange: (countryname:string|undefined) => void;
 }
 
@@ -66,7 +78,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
             let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { 
                                                                                         return {
                                                                                             key:i.alpha3Code,
-                                                                                            text:getCountryName(i,props.language),
+                                                                                            text:GetCountryName(i,props.language),
                                                                                         }
                                                                                 });
             //filter if limit                                                                     
@@ -76,8 +88,8 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
 
             //sort by country name
-            comboboxoptions.sort(sortByPromoted)
-            //sort if promoted
+            comboboxoptions.sort(sortByCountryName)
+            //sort if promoted (Will bubble up promoted countries)
             if(props.promoted){
                 comboboxoptions.sort(sortByPromoted)
             }
@@ -101,36 +113,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
 
     
-    //UTILS
-    const getFlagUrl = (key:string|number|undefined):string => 
-        "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
-
-    const getCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa"):string => {
-        switch (language){
-            case "en":
-                return country.name;          
-            case "de":
-                return country.translations.de ?? country.name;
-            case "es":
-                return country.translations.es ?? country.name;
-            case "fr":
-                return country.translations.fr ?? country.name;
-            case "ja":
-                return country.translations.ja ?? country.name;
-            case "it":
-                return country.translations.it ?? country.name;
-            case "br":
-                return country.translations.br ?? country.name;
-            case "pt":
-                return country.translations.pt ?? country.name;
-            case "nl":
-                return country.translations.nl ?? country.name;
-            case "fa":
-                return country.translations.fa ?? country.name;
-            default:
-                return country.name;
-        }
-    }
+    
 
     //Sort functions for combobox options
     const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
@@ -160,11 +143,20 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         
     
 
-    const renderFlagIcon = ():JSX.Element | undefined  => {
+    const renderFlagIcon = ():JSX.Element => {
         return countrykey != undefined ? 
-             <ImageIcon className={iconClass} imageProps={{src:getFlagUrl(countrykey),width:46,height:30}}/>
+             <ImageIcon className={iconClass} imageProps={{src:GetFlagUrl(countrykey),width:46,height:30}}/>
             :
-            <FontIcon iconName="GlobeFavorite" className={iconClass} />
+            <FontIcon iconName="Globe" className={iconClass} />
+    }
+
+    const renderInfoIcon = ():JSX.Element => {
+        if(props.displayinfo){
+            return <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={countrykey == undefined} onClick={openPanel} />
+        }else{
+            return <div/>
+        }
+        
     }
 
     //EVENTS
@@ -188,7 +180,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         <div>
 
             {option && option.key && (
-                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:getFlagUrl(option.key),width:25,height:17}} aria-hidden="true"/>
+                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:GetFlagUrl(option.key),width:25,height:17}} aria-hidden="true"/>
             )}
 
             {option && option.text && (
@@ -221,7 +213,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                         style={{width:"100%"}}
                     />
 
-                    <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={countrykey == undefined} onClick={openPanel} />
+                    {renderInfoIcon()}
                 </Stack>
                 <Panel
                         headerText={selectedCountry?.name}
@@ -230,7 +222,35 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
                         closeButtonAriaLabel="Close"
                     >
-                    <span>Capital : {selectedCountry?.capital}</span>
+                    <Image
+                        src={GetFlagUrl(selectedCountry?.alpha3Code)}
+                        alt="flag"
+                        width={150}
+                    />
+                    <br/>
+                    <FontIcon iconName="Globe2" className={smallIconClass} /><span className={bold}>Region/Subregion : </span><br/>
+                    <span>{selectedCountry?.region}/{selectedCountry?.subregion}</span><br/><br/>
+
+                    <FontIcon iconName="GlobeFavorite" className={smallIconClass} /><span className={bold}>Capital :</span><br/>
+                    <span>{selectedCountry?.capital}</span><br/><br/>
+
+                    <FontIcon iconName="Family" className={smallIconClass} /><span className={bold}>Population : </span><br/>
+                    <span>{selectedCountry?.population}</span><br/><br/>
+
+                    <FontIcon iconName="AllCurrency" className={smallIconClass} /><span className={bold}>Currencies : </span><br/>
+                    {selectedCountry?.currencies.map(c => {return <div><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
+
+                    <FontIcon iconName="Phone" className={smallIconClass} /><span className={bold}>Calling codes : </span>
+                    {selectedCountry?.callingCodes.map(c => {return <div><span>{c}</span><br/></div>})}<br/>
+                    
+                    <FontIcon iconName="Clock" className={smallIconClass} /><span className={bold}>Timezones : </span>
+                    {selectedCountry?.timezones.map(t => {return <div><span>{t}</span><br/></div>})}<br/>
+                    
+                    <FontIcon iconName="Feedback" className={smallIconClass} /><span className={bold}>Languages : </span>
+                    {selectedCountry?.languages.map(l => {return <div><span>{l.name}</span><br/></div>})}<br/>
+                    
+                    <FontIcon iconName="Nav2DMapView" className={smallIconClass} /><span className={bold}>Borders : </span>
+                    {selectedCountry?.borders.map(b => {return <div><ImageIcon className={iconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
                 </Panel>
             </div>
                        

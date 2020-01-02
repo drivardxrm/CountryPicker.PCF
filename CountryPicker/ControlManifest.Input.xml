@@ -13,14 +13,17 @@
       <value name="br" display-name-key="br" description-key="Brazilian">br</value>
       <value name="pt" display-name-key="pt" description-key="Portugese">pt</value>
       <value name="nl" display-name-key="nl" description-key="Dutch">nl</value>
-      <value name="hr" display-name-key="hr" description-key="??">hr</value>
+      <value name="hr" display-name-key="hr" description-key="Croatian">hr</value>
       <value name="fa" display-name-key="fa" description-key="Arabic">fa</value>
 
     </property>
 
     <property name="promoted" display-name-key="Promoted" description-key="Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'" of-type="SingleLine.Text" usage="input" />
     <property name="limit" display-name-key="Limit" description-key="Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'" of-type="SingleLine.Text" usage="input" />
-
+    <property name="displayinfo" display-name-key="DisplayInfo" description-key="Display Info Panel" of-type="Enum" usage="input" required="true">
+      <value name="true" display-name-key="true" description-key="True" default="true">true</value>
+      <value name="false" display-name-key="false" description-key="False">false</value>
+    </property>
 
     <resources>
       <code path="index.ts" order="1"/>

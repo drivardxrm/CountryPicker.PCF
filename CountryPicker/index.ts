@@ -17,6 +17,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 													language:"en", 
 													promoted:undefined,
 													limit:undefined,
+													displayinfo:true,
 													onChange : this.notifyChange.bind(this)
 												};
 
@@ -66,6 +67,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._props.countryname = this._selected;
 		this._props.language = context.parameters.language.raw || "en";
 		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
+		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
 
 		//harness will put 'val' by default
 		this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
