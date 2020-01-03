@@ -60,7 +60,8 @@ export interface Country {
     cioc: string;
 }
 
-//Utility functions
+
+
 export const GetCountry = (countries:Country[],countrykey:string|number) : Country | undefined => {
         
     var selectedCountry = countries.filter(c => c.alpha3Code === countrykey);
@@ -70,7 +71,7 @@ export const GetCountry = (countries:Country[],countrykey:string|number) : Count
 export const GetFlagUrl = (key:string|number|undefined):string => 
         "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
 
-export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa"):string => {
+export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" |  "fa"):string => {
     switch (language){
         case "en":
             return country.name;          
@@ -84,8 +85,6 @@ export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "f
             return country.translations.ja ?? country.name;
         case "it":
             return country.translations.it ?? country.name;
-        case "br":
-            return country.translations.br ?? country.name;
         case "pt":
             return country.translations.pt ?? country.name;
         case "nl":

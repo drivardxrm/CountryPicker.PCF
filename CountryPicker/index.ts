@@ -16,6 +16,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 													promoted:undefined,
 													limit:undefined,
 													displayinfo:true,
+													readonly:true,
+													masked:false,
 													onChange : this.notifyChange.bind(this)
 												};
 
@@ -60,15 +62,38 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
+		//Visibility of the main attribute on the form
+		let isVisible = context.mode.isVisible 
+		
+		// If the bound attribute is disabled because it is inactive or the user doesn't have access
+		let isReadOnly = context.mode.isControlDisabled;
+
+		let isMasked = false;
+		// When a field has FLS enabled, the security property on the attribute parameter is set
+		if (context.parameters.country.security) {
+			isReadOnly = isReadOnly || !context.parameters.country.security.editable;
+			isVisible = isVisible && context.parameters.country.security.readable;
+			isMasked = isVisible && !context.parameters.country.security.readable
+		}
+
+		if(!isVisible){
+			return;
+		}
+		
+		
+		
+		
 		this._selected = context.parameters.country.raw || "";
 
+		//Prepare props for component rendering
 		this._props.countryname = this._selected;
 		this._props.language = context.parameters.language.raw || "en";
 		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
 		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
-
-		//harness will put 'val' by default
+		//harness will put 'val' by default so I want to treat this value as null
 		this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
+		this._props.readonly = isReadOnly;
+		this._props.masked = isMasked;
 
 		// Add code to update control view
 		ReactDOM.render(

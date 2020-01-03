@@ -1,42 +1,35 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Stack, VirtualizedComboBox, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
+import { Stack, VirtualizedComboBox,TextField, IComboBoxOption,IComboBox} from "office-ui-fabric-react/lib/index"; 
 import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { initializeIcons } from "@uifabric/icons";
-import useFetch from "use-http"
-import {Country, GetFlagUrl, GetCountryName, GetCountry} from "./Country"
+import useFetch from "use-http";
+import {Country,GetCountryName,GetCountry,GetFlagUrl} from "./CountryUtils"
 import CountryInfoPanel, {ICountryInfoPanelProps} from "./CountryInfoPanel"
 
-const iconClass = mergeStyles({
-    fontSize: 30,
-    height: 30,
-    width: 70,
-    margin: "1px"
-});
-
-
+//PROPS for component (received from caller)
 export interface ICountryPickerComboBoxProps {
     countryname: string;
-    language: "en" | "de" | "es" | "fr" | "ja" | "it" | "br" | "pt" | "nl" | "hr" | "fa";
+    language: "en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa";
     promoted: string[]|undefined;
     limit: string[]|undefined;
     displayinfo : boolean;
+    readonly: boolean;
+    masked: boolean;
     onChange: (countryname:string|undefined) => void;
 }
 
 const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
-    
-    const getSelectedKey = (countryname:string) : string | number | undefined => {
-        var selectedOption = options?.filter(o => o.text === countryname);
-        return selectedOption.length === 0 ? undefined : selectedOption[0].key;
-    }
-
 
     //STATE HOOKS VARIABLES
+    const [countries, setCountries] = useState<Country[]>([]);
+    const [selectedCountry, setSelectedCountry] = useState<Country|undefined>(undefined);
+
     const [options, setOptions] = useState<IComboBoxOption[]>([]);
-    const [countrykey, setCountryKey] = useState<string|number|undefined>(getSelectedKey(props.countryname));
-    const [countryInfoPanelProps, setCountryInfoPanelProps] = useState<ICountryInfoPanelProps>({country:undefined,disabled:true,displayicon:props.displayinfo});
+    const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
+    
+    
 
 
     //FETCH HOOK
@@ -48,44 +41,64 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         initializeIcons();
     }, []); 
 
-    //-Set Options when 'data' changes (when retrieved from API call)
+    //-Set Countries when 'data' changes (when retrieved from API call)
     useEffect(() => {
-        if(data && !error)
-        { 
-            let countries = data as Country[];
-            let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { 
-                                                                                        return {
-                                                                                            key:i.alpha3Code,
-                                                                                            text:GetCountryName(i,props.language),
-                                                                                        }
-                                                                                });
-            //filter if limit                                                                     
-            if(props.limit){
-                comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
-            }
+        data && !error ?  
+            setCountries(data as Country[]) :
+            setCountries([]);
+    }, [data]);
 
-
-            //sort by country name
-            comboboxoptions.sort(sortByCountryName)
-            //sort if promoted (Will bubble up promoted countries)
-            if(props.promoted){
-                comboboxoptions.sort(sortByPromoted)
-            }
-            
-            setOptions(comboboxoptions);
-            console.log("Options were set!");
-        }
-      }, [data]);
-
-    //-SET selectedCountry when 'countrykey' changes
+    //-Set Combobox options when 'countries' changes
     useEffect(() => {
-        if(countrykey  && data && !error)
-        {
-            setCountryInfoPanelProps({country:GetCountry(data as Country[],countrykey),disabled:false,displayicon:props.displayinfo})        
-        }else{
-            setCountryInfoPanelProps({country:undefined,disabled:true,displayicon:props.displayinfo})
+        
+        //Get all countries
+        let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {
+                                                                                        key:i.alpha3Code,
+                                                                                        text:GetCountryName(i,props.language),
+                                                                                    }
+                                                                            });
+        //filter out some values if 'limit' contains values                                                                     
+        if(props.limit){
+            comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
         }
-    }, [countrykey]);
+
+        //sort alphabetically by country name
+        comboboxoptions.sort(sortByCountryName)
+        
+        //sort if 'promoted' (Will bubble up promoted countries)
+        if(props.promoted){
+            comboboxoptions.sort(sortByPromoted)
+        }
+        
+        setOptions(comboboxoptions);
+        
+      }, [countries]);
+
+    //-Set 'selectedOption' when 'options' changes
+    useEffect(() => {
+        setSelectedOption(getSelectedOption(props.countryname))
+    }, [options]);
+
+    //-Set 'selectedCountry' when 'selectedOption' changes
+    useEffect(() => {
+        selectedOption ? 
+            setSelectedCountry(GetCountry(countries,selectedOption.key)) :
+            setSelectedCountry(undefined);
+
+    }, [selectedOption]);
+
+    //Get an option by countryname (Assumes that country name are unique)
+    const getSelectedOption = (countryname:string) : IComboBoxOption | undefined => {
+        var selectedOption = options?.filter(o => o.text === countryname);
+        return selectedOption.length === 0 ? undefined : selectedOption[0];
+    }
+
+    //Props to pass to CountryInfoPanel
+    const getCountryInfoPanelProps = ():ICountryInfoPanelProps =>{
+        return selectedCountry ?
+             {country:selectedCountry,disabled:false,displayicon:props.displayinfo}  :      
+             {country:undefined,disabled:true,displayicon:props.displayinfo}
+    }
 
     //Sort functions for combobox options
     const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
@@ -106,44 +119,60 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return 0;
     }
 
+    // Rank of a given country compared to the 'promoted' countri list. 
+    //Ex. promoted = [USA,CAN,MEX], USA=1, CAN=2, MEX=3, COL=0. If promoted is empty rank = 0 for all countries
     const promotedRank = (countrykey:string | number):Number => {
-        //debugger;
+
         var last = props.promoted?.length ?? 0;
         var rank = props.promoted?.indexOf(countrykey.toString()) ?? last;
         return rank < 0 ? last : rank;
     }
         
+    //STYLES
+    const leftIconClass = mergeStyles({
+        fontSize: 30,
+        height: 30,
+        width: 50,
+        margin: "1px",      
+    });
     
-
-    const renderFlagIcon = ():JSX.Element => {
-        return countrykey != undefined ? 
-             <ImageIcon className={iconClass} imageProps={{src:GetFlagUrl(countrykey), height:30, width:60}}/>
-            :
-            <FontIcon iconName="Globe" className={iconClass} />
-    }
-
     //EVENTS
-    const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined,value? : string | undefined) => { 
+    //- When value of combobox changes, Change selected option and callback to PCF
+    const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined) => { 
         if(option)
         {
-            console.log(index + "-" + option.key + "-" + option.text); 
-            setCountryKey(option.key);
+
+            setSelectedOption(option);
             props.onChange(option.text); 
             
         }else{
             //clear
-            setCountryKey(undefined);
+            setSelectedOption(undefined);
             props.onChange(undefined);
         }  
     } 
-  
+
+
+    //RENDERING
+    //If country is defined display flag, otherwise display Globe icon
+    const renderFlagIcon = ():JSX.Element => {
+        return selectedOption  ?
+            <ImageIcon className={leftIconClass} imageProps={{src:GetFlagUrl(selectedOption.key), height:"100%", width:"100%"}}/> :
+            <FontIcon iconName="Globe" className={leftIconClass} />
+    }
+
+
+    //- Rendering of the dropdown options (Flag + Countryname)
     const onRenderOption = (option:IComboBoxOption|undefined): JSX.Element => {
         
         return (
         <div>
 
             {option && option.key && (
-                <ImageIcon style={{ marginRight: "8px", width:25, height:17 }} imageProps={{src:GetFlagUrl(option.key),width:25,height:17}} aria-hidden="true"/>
+                <ImageIcon 
+                    style={{ marginRight: "8px", width:25, height:17 }} 
+                    imageProps={{src:GetFlagUrl(option.key),width:25,height:17}}
+                />
             )}
 
             {option && option.text && (
@@ -155,37 +184,45 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
     }
 
-    //RENDERING
+    //MAIN RENDERING
     if(loading){
         return <div>Loading...</div>
     }if(error){
         return <div>Error fetching data...</div>
+    }if(props.masked){
+        return(
+            <Stack tokens={{ childrenGap: 2 }} horizontal>
+                <FontIcon iconName="Lock" className={leftIconClass} />     
+                <TextField value="*********" style={{width:"100%"}}/>
+            </Stack>
+        )
     }else{
+        console.log("text : " + selectedOption?.text);
         return (
             <div>
-                <Stack tokens={{ childrenGap: 2 }} horizontal>
+                <Stack  horizontal>
                     {renderFlagIcon()}
                     
                     <VirtualizedComboBox
                         onRenderOption={onRenderOption}
                         onChange={onComboboxChanged}          
-                        selectedKey={countrykey}
+                        selectedKey={selectedOption?.key}
+                        text={selectedOption?.text}
                         allowFreeform={true}
                         autoComplete="on"
                         options={options}
                         style={{width:"100%"}}
+                        disabled={props.readonly}
                     />
                     
-                    {React.createElement(CountryInfoPanel,countryInfoPanelProps)}
+                    {React.createElement(CountryInfoPanel,getCountryInfoPanelProps())}
 
-                </Stack>
-                
+                </Stack>               
             </div>
                        
         );
     }
-    
-  
+
 }
 
 export default CountryPickerComboBox;
