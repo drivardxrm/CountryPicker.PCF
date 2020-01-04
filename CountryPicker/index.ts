@@ -95,7 +95,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._props.readonly = isReadOnly;
 		this._props.masked = isMasked;
 
-		// Add code to update control view
+		// RENDER React Component
 		ReactDOM.render(
 			React.createElement(CountryPickerComboBox,this._props)
 			, this._container

@@ -72,28 +72,44 @@ export const GetFlagUrl = (key:string|number|undefined):string =>
         "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
 
 export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" |  "fa"):string => {
+
+    let name = "";
     switch (language){
         case "en":
-            return country.name;          
+             name = country.name;  
+             break;        
         case "de":
-            return country.translations.de ?? country.name;
+            name = country.translations.de ?? country.name;
+            break;
         case "es":
-            return country.translations.es ?? country.name;
+            name = country.translations.es ?? country.name;
+            break;
         case "fr":
-            return country.translations.fr ?? country.name;
+            name = country.translations.fr ?? country.name;
+            break;
         case "ja":
-            return country.translations.ja ?? country.name;
+            name = country.translations.ja ?? country.name;
+            break;
         case "it":
-            return country.translations.it ?? country.name;
+            name = country.translations.it ?? country.name;
+            break;
         case "pt":
-            return country.translations.pt ?? country.name;
+            name = country.translations.pt ?? country.name;
+            break;
         case "nl":
-            return country.translations.nl ?? country.name;
+            name = country.translations.nl ?? country.name;
+            break;
         case "fa":
-            return country.translations.fa ?? country.name;
+            name = country.translations.fa ?? country.name;
+            break;
         default:
-            return country.name;
+            name = country.name;
     }
+    //in case one of the translation is empty, default to country.name
+    if(name == ""){
+        name = country.name;
+    }
+    return name;
 }
 
 

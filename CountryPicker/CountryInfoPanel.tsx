@@ -38,9 +38,6 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
         fontWeight: "bold",
     });
 
-    
-
-    
 
     if(props.displayicon){
         return(
@@ -48,11 +45,12 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
                 <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={props.disabled} onClick={openPanel} />
                 <Panel
                     isLightDismiss
-                    headerText={props.country?.name}
+                    headerText={props.country?.name + " (" + props.country?.alpha3Code + ")"}
+                    headerClassName={bold}
                     isOpen={isOpen}
                     onDismiss={dismissPanel}
                     // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-                    closeButtonAriaLabel="Close"
+                    closeButtonAriaLabel="Close"                   
                 >
                     
                     <Image
@@ -69,7 +67,7 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
                     <span>{props.country?.capital}</span><br/><br/>
         
                     <FontIcon iconName="Family" className={panelIconClass} /><span className={bold}>Population : </span><br/>
-                    <span>{props.country?.population}</span><br/><br/>
+                    <span>{props.country?.population?.toLocaleString("en")}</span><br/><br/>
         
                     <FontIcon iconName="AllCurrency" className={panelIconClass} /><span className={bold}>Currencies : </span><br/>
                     {props.country?.currencies.map(c => {return <div><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
