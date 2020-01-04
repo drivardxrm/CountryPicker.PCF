@@ -1,20 +1,30 @@
 # CountryPicker.PCF
 Country Picker PCF (PowerApps Component framework) Control that turns a PowerApps text field into a Combobox displaying country names and flags.
 
+Features:
+
+Promote some countries to appear first.
+
+Limit the available countries to show only the one that matters to your use case
+
+Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
+
 Country information comes from this public API project : https://restcountries.eu/
-DISCLAIMER : ???
+
+
 
 # Dependencies
 office-ui-fabric-react : https://github.com/OfficeDev/office-ui-fabric-react
+
 use-http : http://use-http.com/#/
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
 |-------------------|----------------------------------------------------------------------------------------------|----------   |
 | Country  | Bound single line text field.                                                             |             |
-| Language    | Base language for country names.                                                          | en |
+| Language    | Base language for country names. Available languages (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)                                                    | en |
 | Promoted   | Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX') |   |
-| Limit    | Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX')|      |
+| Limit    | Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'). Leave blank to include all countries|      |
 | DisplayInfo   | Display Info Panel   | true        |
 
 
