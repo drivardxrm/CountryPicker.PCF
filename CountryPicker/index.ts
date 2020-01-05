@@ -6,7 +6,7 @@ import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPicke
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
-	private _selected: string|undefined;
+	private _selected: string;
 
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
@@ -49,10 +49,11 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 	}
 
-	private notifyChange(selected: string|undefined) {
-		
+	private notifyChange(selected: string) {
+
 		this._selected = selected;
 		this._notifyOutputChanged();
+
 	}
 
 

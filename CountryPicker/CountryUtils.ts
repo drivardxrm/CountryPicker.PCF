@@ -71,7 +71,7 @@ export const GetCountry = (countries:Country[],countrykey:string|number) : Count
 export const GetFlagUrl = (key:string|number|undefined):string => 
         "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
 
-export const GetCountryName = (country:Country, language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" |  "fa"):string => {
+export const GetCountryName = (country:Country, language:string):string => {
 
     let name = "";
     switch (language){

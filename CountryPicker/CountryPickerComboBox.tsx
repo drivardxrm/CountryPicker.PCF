@@ -11,13 +11,13 @@ import CountryInfoPanel, {ICountryInfoPanelProps} from "./CountryInfoPanel"
 //PROPS for component (received from caller)
 export interface ICountryPickerComboBoxProps {
     countryname: string;
-    language: "en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa";
+    language: string;
     promoted: string[]|undefined;
     limit: string[]|undefined;
     displayinfo : boolean;
     readonly: boolean;
     masked: boolean;
-    onChange: (countryname:string|undefined) => void;
+    onChange: (countryname:string) => void;
 }
 
 const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
@@ -28,27 +28,24 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
     const [options, setOptions] = useState<IComboBoxOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
-    
-    
-
 
     //FETCH HOOK
     const { loading, error, data  } = useFetch("https://restcountries.eu/rest/v2/all", undefined, []) 
    
     //EFFECT HOOKS
-    //-Initialization : will happen only once = contructor
+    //-Initialization : will happen only once = like a contructor
     useEffect(() => {
         initializeIcons();
     }, []); 
 
-    //-Set Countries when 'data' changes (when retrieved from API call)
+    //-Set Countries when 'data' changes (when retrieved from API call) or props changed
     useEffect(() => {
         data && !error ?  
             setCountries(data as Country[]) :
             setCountries([]);
     }, [data]);
 
-    //-Set Combobox options when 'countries' changes
+    //-Set Combobox options when 'countries' changes or component 'props'
     useEffect(() => {
         
         //Get all countries
@@ -72,19 +69,23 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         
         setOptions(comboboxoptions);
         
-      }, [countries]);
+      }, [countries,props]);
 
-    //-Set 'selectedOption' when 'options' changes
+    //-Set 'selectedOption' when 'options' changes or component 'props'
     useEffect(() => {
         setSelectedOption(getSelectedOption(props.countryname))
-    }, [options]);
+    }, [options,props]);
 
-    //-Set 'selectedCountry' when 'selectedOption' changes
+    //-Set 'selectedCountry' and Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
-        selectedOption ? 
-            setSelectedCountry(GetCountry(countries,selectedOption.key)) :
+        if(selectedOption) {
+            setSelectedCountry(GetCountry(countries,selectedOption.key));
+            props.onChange(selectedOption.text); 
+        } else if(options.length > 1){ //Clear only if options are defined
             setSelectedCountry(undefined);
-
+            props.onChange("");
+        }
+            
     }, [selectedOption]);
 
     //Get an option by countryname (Assumes that country name are unique)
@@ -139,19 +140,10 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     //EVENTS
     //- When value of combobox changes, Change selected option and callback to PCF
     const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined) => { 
-        if(option)
-        {
+        
+        setSelectedOption(option);
 
-            setSelectedOption(option);
-            props.onChange(option.text); 
-            
-        }else{
-            //clear
-            setSelectedOption(undefined);
-            props.onChange(undefined);
-        }  
     } 
-
 
     //RENDERING
     //If country is defined display flag, otherwise display Globe icon
@@ -160,7 +152,6 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
             <ImageIcon className={leftIconClass} imageProps={{src:GetFlagUrl(selectedOption.key), height:"100%", width:"100%"}}/> :
             <FontIcon iconName="Globe" className={leftIconClass} />
     }
-
 
     //- Rendering of the dropdown options (Flag + Countryname)
     const onRenderOption = (option:IComboBoxOption|undefined): JSX.Element => {
