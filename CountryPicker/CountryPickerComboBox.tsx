@@ -10,14 +10,14 @@ import CountryInfoPanel, {ICountryInfoPanelProps} from "./CountryInfoPanel"
 
 //PROPS for component (received from caller)
 export interface ICountryPickerComboBoxProps {
-    countryname: string;
+    countrycode: string;
     language: string;
     promoted: string[]|undefined;
     limit: string[]|undefined;
     displayinfo : boolean;
     readonly: boolean;
     masked: boolean;
-    onChange: (countryname:string) => void;
+    onChange: (countrycode:string,countryname:string) => void;
 }
 
 const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
@@ -73,24 +73,24 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
     //-Set 'selectedOption' when 'options' changes or component 'props'
     useEffect(() => {
-        setSelectedOption(getSelectedOption(props.countryname))
+        setSelectedOption(getSelectedOption(props.countrycode))
     }, [options,props]);
 
     //-Set 'selectedCountry' and Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
         if(selectedOption) {
             setSelectedCountry(GetCountry(countries,selectedOption.key));
-            props.onChange(selectedOption.text); 
-        } else if(options.length > 1){ //Clear only if options are defined
+            props.onChange(selectedOption.key.toString(),selectedOption.text); 
+        } else if(options.length > 1){ //Clear only if options are defined PREVENTS clear on init
             setSelectedCountry(undefined);
-            props.onChange("");
+            props.onChange("","");
         }
             
     }, [selectedOption]);
 
-    //Get an option by countryname (Assumes that country name are unique)
-    const getSelectedOption = (countryname:string) : IComboBoxOption | undefined => {
-        var selectedOption = options?.filter(o => o.text === countryname);
+    //Get an option by countrycode (Assumes that country code are unique)
+    const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
+        var selectedOption = options.filter(o => o.key === countrycode);
         return selectedOption.length === 0 ? undefined : selectedOption[0];
     }
 

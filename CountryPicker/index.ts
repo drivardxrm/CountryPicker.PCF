@@ -6,12 +6,13 @@ import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPicke
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
-	private _selected: string;
+	private _selectedCode: string;
+	private _selectedName: string;
 
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
 	private _props: ICountryPickerComboBoxProps = { 
-													countryname: "",
+													countrycode: "",
 													language:"en", 
 													promoted:undefined,
 													limit:undefined,
@@ -49,9 +50,10 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 	}
 
-	private notifyChange(selected: string) {
+	private notifyChange(selectedCode: string, selectedName:string) {
 
-		this._selected = selected;
+		this._selectedCode = selectedCode;
+		this._selectedName = selectedName;
 		this._notifyOutputChanged();
 
 	}
@@ -71,10 +73,10 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 		let isMasked = false;
 		// When a field has FLS enabled, the security property on the attribute parameter is set
-		if (context.parameters.country.security) {
-			isReadOnly = isReadOnly || !context.parameters.country.security.editable;
-			isVisible = isVisible && context.parameters.country.security.readable;
-			isMasked = isVisible && !context.parameters.country.security.readable
+		if (context.parameters.countrycode.security) {
+			isReadOnly = isReadOnly || !context.parameters.countrycode.security.editable;
+			isVisible = isVisible && context.parameters.countrycode.security.readable;
+			isMasked = isVisible && !context.parameters.countrycode.security.readable
 		}
 
 		if(!isVisible){
@@ -84,10 +86,10 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 		
 		
-		this._selected = context.parameters.country.raw || "";
+		this._selectedCode = context.parameters.countrycode.raw || "";
 
 		//Prepare props for component rendering
-		this._props.countryname = this._selected;
+		this._props.countrycode = this._selectedCode;
 		this._props.language = context.parameters.language.raw || "en";
 		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
 		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
@@ -110,7 +112,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	public getOutputs(): IOutputs
 	{
 		return {
-			country: this._selected
+			countrycode: this._selectedCode,
+			countryname: this._selectedName
 		};
 	}
 
