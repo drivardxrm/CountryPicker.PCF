@@ -1,16 +1,16 @@
 # CountryPicker.PCF
 Country Picker PCF (PowerApps Component framework) Control that turns a PowerApps text field into a Combobox displaying country names and flags.
 
-Features:
+#### Features:
 
-Promote some countries to appear first.
+* Promote some countries to appear first.
 
-Limit the available countries to show only the one that matters to your use case
+* Limit the available countries to show only the one that matters to your use case
 
-Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
+* Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
 
-Country information comes from this public API project : https://restcountries.eu/
-
+* Country information comes from this public API project : https://restcountries.eu/  
+##### DISCLAIMER : The author of the project is not responsible for the accuracy of the content of the API
 
 
 # Dependencies
@@ -31,8 +31,14 @@ use-http : http://use-http.com/#/
 
 # Screenshots
 ![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker.png?raw=true)
+
+##### Country info panel
 ![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Panel.png?raw=true)
+
+##### Different configurations
 ![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_feats.gif?raw=true)
+
+##### Languages
 ![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/country_picker_lang.gif?raw=true)
 
 
