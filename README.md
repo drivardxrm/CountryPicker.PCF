@@ -1,16 +1,16 @@
 # CountryPicker.PCF
 Country Picker PCF (PowerApps Component framework) Control that turns a PowerApps text field into a Combobox displaying country names and flags.
 
-Features:
+#### Features:
 
-Promote some countries to appear first.
+* Promote some countries to appear first.
 
-Limit the available countries to show only the one that matters to your use case
+* Limit the available countries to show only the one that matters to your use case
 
-Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
+* Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
 
-Country information comes from this public API project : https://restcountries.eu/
-
+* Country information comes from this public API project : https://restcountries.eu/  
+##### DISCLAIMER : The author of the project is not responsible for the accuracy of the content of the API
 
 
 # Dependencies
@@ -21,7 +21,8 @@ use-http : http://use-http.com/#/
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
 |-------------------|----------------------------------------------------------------------------------------------|----------   |
-| Country  | Bound single line text field.                                                             |             |
+| CountryCode  | REQUIRED: Bound Country field (represents ISO 3166-1 3-letter country code)                             |             |
+| CountryName  | OPTIONAL OUTPUT: Country name in the chosen language                           |             |
 | Language    | Base language for country names. Available languages (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)                                                    | en |
 | Promoted   | Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX') |   |
 | Limit    | Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'). Leave blank to include all countries|      |
@@ -29,8 +30,17 @@ use-http : http://use-http.com/#/
 
 
 # Screenshots
-![alt text](https://github.com/drivardxrm/IconOptionSet.PCF/blob/master/IconOptionSet.png?raw=true)
-![alt text](https://github.com/drivardxrm/IconOptionSet.PCF/blob/master/iconoptionset.gif?raw=true)
+![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker.png?raw=true)
+
+##### Country info panel
+![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Panel.png?raw=true)
+
+##### Different configurations
+![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_feats.gif?raw=true)
+
+##### Languages
+![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/country_picker_lang.gif?raw=true)
+
 
 # Installation
 You can install the component directly with the provided files
