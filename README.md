@@ -3,7 +3,7 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 #### Features:
 
-* Promote some countries to appear first.
+* Promote some countries to appear first in the combobox.
 
 * Limit the available countries to show only the one that matters to your use case
 
@@ -30,7 +30,7 @@ use-http : http://use-http.com/#/
 
 
 # Screenshots
-![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker.png?raw=true)
+![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Main.png?raw=true)
 
 ##### Country info panel
 ![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Panel.png?raw=true)
@@ -45,9 +45,9 @@ use-http : http://use-http.com/#/
 # Installation
 You can install the component directly with the provided files
 
-https://github.com/drivardxrm/IconOptionSet.PCF/blob/master/IconOptionSetPCF_1_0_0_0.zip  (Unmanaged solution)
+https://github.com/drivardxrm/CountryPicker.PCF/blob/master/CountryPickerPCF_1_0_0_0.zip  (Unmanaged solution)
 
-https://github.com/drivardxrm/IconOptionSet.PCF/blob/master/IconOptionSetPCF_1_0_0_0_managed.zip (Managed solution)
+https://github.com/drivardxrm/CountryPicker.PCF/blob/master/CountryPickerPCF_1_0_0_0_managed.zip (Managed solution)
 
 # Get required tools
 
