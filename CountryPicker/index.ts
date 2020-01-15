@@ -83,9 +83,6 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 			return;
 		}
 		
-		
-		
-		
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
 		//Prepare props for component rendering
