@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useState} from "react";
-import { Image, IconButton, Panel} from "office-ui-fabric-react/lib/index"; 
-import { useConstCallback } from '@uifabric/react-hooks';
-import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
-import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
+import { useState } from "react";
+import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
+import { useConstCallback } from "@uifabric/react-hooks";
+//import { useConstCallback } from "@fluentui/react";
+//import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
+//import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Country,GetFlagUrl } from "./CountryUtils"
 
 //PROPS for component (received from caller)
@@ -18,7 +19,7 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
     //STATE HOOKS VARIABLES   
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const openPanel = useConstCallback(() => setIsOpen(true));
+    const openPanel =  useConstCallback(() => setIsOpen(true));
     const dismissPanel = useConstCallback(() => setIsOpen(false));
 
     //STYLES
@@ -70,19 +71,19 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
                     <span>{props.country?.population?.toLocaleString("en")}</span><br/><br/>
         
                     <FontIcon iconName="AllCurrency" className={panelIconClass} /><span className={bold}>Currencies : </span><br/>
-                    {props.country?.currencies.map(c => {return <div><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
+                    {props.country?.currencies.map((c,i) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
         
                     <FontIcon iconName="Phone" className={panelIconClass} /><span className={bold}>Calling codes : </span>
-                    {props.country?.callingCodes.map(c => {return <div><span>{c}</span><br/></div>})}<br/>
+                    {props.country?.callingCodes.map((c,i) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
                     
                     <FontIcon iconName="Clock" className={panelIconClass} /><span className={bold}>Timezones : </span>
-                    {props.country?.timezones.map(t => {return <div><span>{t}</span><br/></div>})}<br/>
+                    {props.country?.timezones.map((t,i) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
                     
                     <FontIcon iconName="Feedback" className={panelIconClass} /><span className={bold}>Languages : </span>
-                    {props.country?.languages.map(l => {return <div><span>{l.name}</span><br/></div>})}<br/>
+                    {props.country?.languages.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
                     
                     <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
-                    {props.country?.borders.map(b => {return <div><ImageIcon className={flagIconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
+                    {props.country?.borders.map((b,i) => {return <div key={'border-'+i}><ImageIcon className={flagIconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
                 </Panel>
             </div>
         );

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="DR" constructor="CountryPicker" version="1.1.1" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard">
+  <control namespace="DR" constructor="CountryPicker" version="1.1.2" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard" preview-image="img/CountryPicker.png">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="countrycode" display-name-key="CountryCode" description-key="REQUIRED: Bound Country field (represents ISO 3166-1 3-letter country code)" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="countryname" display-name-key="CountryName" description-key="OPTIONAL: Country name in the chosen language (default : English)" of-type="SingleLine.Text" usage="bound" />
@@ -27,22 +27,7 @@
 
     <resources>
       <code path="index.ts" order="1"/>
-      <!-- UNCOMMENT TO ADD MORE RESOURCES
-      <css path="css/CountryPicker.css" order="1" />
-      <resx path="strings/CountryPicker.1033.resx" version="1.0.0" />
-      -->
     </resources>
-    <!-- UNCOMMENT TO ENABLE THE SPECIFIED API
-    <feature-usage>
-      <uses-feature name="Device.captureAudio" required="true" />
-      <uses-feature name="Device.captureImage" required="true" />
-      <uses-feature name="Device.captureVideo" required="true" />
-      <uses-feature name="Device.getBarcodeValue" required="true" />
-      <uses-feature name="Device.getCurrentPosition" required="true" />
-      <uses-feature name="Device.pickFile" required="true" />
-      <uses-feature name="Utility" required="true" />
-      <uses-feature name="WebAPI" required="true" />
-    </feature-usage>
-    -->
+    
   </control>
 </manifest>

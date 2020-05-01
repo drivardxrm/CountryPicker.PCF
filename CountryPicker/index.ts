@@ -52,6 +52,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 	private notifyChange(selectedCode: string, selectedName:string) {
 
+		
 		this._selectedCode = selectedCode;
 		this._selectedName = selectedName;
 		this._notifyOutputChanged();
@@ -85,21 +86,26 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
+		
 		//Prepare props for component rendering
-		this._props.countrycode = this._selectedCode;
-		this._props.language = context.parameters.language.raw || "en";
-		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
-		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
-		//harness will put 'val' by default so I want to treat this value as null
-		this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
-		this._props.readonly = isReadOnly;
-		this._props.masked = isMasked;
+		if(this._props.countrycode !== this._selectedCode)
+		{
+			this._props.countrycode = this._selectedCode;
+			this._props.language = context.parameters.language.raw || "en";
+			this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
+			this._props.displayinfo = context.parameters.displayinfo.raw === "true"
+			//harness will put 'val' by default so I want to treat this value as null
+			this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
+			this._props.readonly = isReadOnly;
+			this._props.masked = isMasked;
 
-		// RENDER React Component
-		ReactDOM.render(
-			React.createElement(CountryPickerComboBox,this._props)
-			, this._container
-		);
+			// RENDER React Component
+			ReactDOM.render(
+				React.createElement(CountryPickerComboBox,this._props)
+				, this._container
+			);
+		}
+		
 	}
 
 	/** 
