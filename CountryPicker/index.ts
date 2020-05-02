@@ -6,6 +6,7 @@ import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPicke
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
+	
 	private _selectedCode: string;
 	private _selectedName: string;
 
@@ -87,24 +88,23 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
 		
-		//Prepare props for component rendering
-		if(this._props.countrycode !== this._selectedCode)
-		{
-			this._props.countrycode = this._selectedCode;
-			this._props.language = context.parameters.language.raw || "en";
-			this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
-			this._props.displayinfo = context.parameters.displayinfo.raw === "true"
-			//harness will put 'val' by default so I want to treat this value as null
-			this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
-			this._props.readonly = isReadOnly;
-			this._props.masked = isMasked;
+		
+		this._props.countrycode = this._selectedCode;
+		this._props.language = context.parameters.language.raw || "en";
+		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
+		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
+		//harness will put 'val' by default so I want to treat this value as null
+		this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
+		this._props.readonly = isReadOnly;
+		this._props.masked = isMasked;
 
-			// RENDER React Component
-			ReactDOM.render(
-				React.createElement(CountryPickerComboBox,this._props)
-				, this._container
-			);
-		}
+		// RENDER React Component
+		ReactDOM.render(
+			React.createElement(CountryPickerComboBox,this._props)
+			, this._container
+		);
+		
+		
 		
 	}
 
@@ -128,4 +128,6 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	{
 		// Add code to cleanup control if necessary
 	}
+
+	
 }

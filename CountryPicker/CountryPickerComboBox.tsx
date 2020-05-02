@@ -114,6 +114,11 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
     //Get an option by countrycode (Assumes that country code are unique)
     const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
+        
+        if(countrycode === ""){
+            return undefined;
+        };
+
         let selected = options.filter(o => o.key === countrycode);
         return selected.length === 0 ? undefined : selected[0];
     };
