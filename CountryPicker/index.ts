@@ -66,10 +66,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void
-	{
-		//Visibility of the main attribute on the form
-		let isVisible = context.mode.isVisible 
-		
+	{	
 		// If the bound attribute is disabled because it is inactive or the user doesn't have access
 		let isReadOnly = context.mode.isControlDisabled;
 
@@ -77,18 +74,11 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		// When a field has FLS enabled, the security property on the attribute parameter is set
 		if (context.parameters.countrycode.security) {
 			isReadOnly = isReadOnly || !context.parameters.countrycode.security.editable;
-			isVisible = isVisible && context.parameters.countrycode.security.readable;
-			isMasked = isVisible && !context.parameters.countrycode.security.readable
-		}
-
-		if(!isVisible){
-			return;
+			isMasked =  !context.parameters.countrycode.security.readable
 		}
 		
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
-		
-		
 		this._props.countrycode = this._selectedCode;
 		this._props.language = context.parameters.language.raw || "en";
 		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
@@ -103,9 +93,6 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 			React.createElement(CountryPickerComboBox,this._props)
 			, this._container
 		);
-		
-		
-		
 	}
 
 	/** 
