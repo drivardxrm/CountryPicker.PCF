@@ -79,6 +79,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
+		//Prepare Props for React Component
 		this._props.countrycode = this._selectedCode;
 		this._props.language = context.parameters.language.raw || "en";
 		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
@@ -90,8 +91,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 		// RENDER React Component
 		ReactDOM.render(
-			React.createElement(CountryPickerComboBox,this._props)
-			, this._container
+			React.createElement(CountryPickerComboBox,this._props),
+			this._container
 		);
 	}
 
@@ -114,6 +115,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	public destroy(): void
 	{
 		// Add code to cleanup control if necessary
+		ReactDOM.unmountComponentAtNode(this._container);
 	}
 
 	
