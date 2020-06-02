@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { useConst } from "@uifabric/react-hooks";
 import { initializeIcons,Stack, VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react"; 
 
@@ -30,79 +30,65 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     });
     
     //STATE HOOKS VARIABLES
-    const [countries, setCountries] = useState<Country[]>([]);
-
-    const [options, setOptions] = useState<IComboBoxOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
 
     //FETCH HOOK : Documentation => https://use-http.com/#/ 
-    const { data, error, loading  } = useFetch("https://restcountries.eu/rest/v2/all",undefined,[]) 
+    const { data, error, loading  } = useFetch<Country[]>("https://restcountries.eu/rest/v2/all",undefined,[]) 
 
-    //EFFECT HOOKS    
-    //-Set Countries  when 'data' changes (when retrieved from API call) 
-    useLayoutEffect(() => {    
-        if(data)
-        {
-            setCountries(data as Country[])    
-        } 
-    }, [data]);
-
-    //-Set options  when 'countries' changes
+    //LAYOUTEFFECT HOOKS - Before render
+    //SET selectedOption 
     useLayoutEffect(() => {
         
-        if(countries.length > 0)
-        {
-            setOptions(getOptions());
-        } 
-
-    }, [countries]);
-
-    //SET selectedOption
-    useLayoutEffect(() => {
-        
-        if(options.length > 0)
+        if(data && props.countrycode !== selectedOption?.key)
         {
             setSelectedOption(getSelectedOption(props.countrycode))
         }
         
-    }, [options,props.countrycode]);
+    }, [data, props.countrycode]);
 
+    //EFFECT HOOKS - after render
     //-Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
 
-        if(options.length > 0){ //ensures that countries are loaded
+        if(data){ //ensures that countries are loaded
             if(selectedOption && props.countrycode !== selectedOption?.key) {
                 
                 props.onChange(selectedOption.key.toString(),selectedOption.text); 
 
-            } else if(selectedOption === undefined && props.countrycode !== ""){ 
+            } else if(selectedOption === undefined && props.countrycode.length === 3){ 
 
                 props.onChange("","");
             };
         }
     }, [selectedOption]);
 
-    //Get combobox options from countries
-    const getOptions = ():IComboBoxOption[] => {
-        let comboboxoptions:IComboBoxOption[] = Array.from(countries, i => { return {
-            key:i.alpha3Code,
-            text:GetCountryName(i,props.language)}
-        });
-        //filter out some values if 'limit' contains values                                                                     
-        if(props.limit){
-            comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
+    //MEMO HOOK
+    //Get combobox options from countries - Executed only when data is first loaded, value is memoized afterward
+    const options = useMemo<IComboBoxOption[]>(()=> {
+        let comboboxoptions:IComboBoxOption[] = [];
+        if(data){
+            comboboxoptions = Array.from(data, i => { return {
+                key:i.alpha3Code,
+                text:GetCountryName(i,props.language)}
+            });
+            //filter out some values if 'limit' contains values                                                                     
+            if(props.limit){
+                comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
+            }
+    
+            //sort alphabetically by country name
+            comboboxoptions.sort(sortByCountryName)
+    
+            //sort if 'promoted' (Will bubble up promoted countries)
+            if(props.promoted){
+                comboboxoptions.sort(sortByPromoted)
+            }
         }
-
-        //sort alphabetically by country name
-        comboboxoptions.sort(sortByCountryName)
-
-        //sort if 'promoted' (Will bubble up promoted countries)
-        if(props.promoted){
-            comboboxoptions.sort(sortByPromoted)
-        }
-
         return comboboxoptions;
-    };
+
+    },[data]); //dependency 
+
+    
 
     //Get an option by countrycode (Assumes that country code are unique)
     const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
@@ -156,13 +142,13 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Loading...</div>
     }if(error){
         return <div>Error fetching data...</div>
-    }if(countries.length === 0){
+
         return <div>No countries to display...</div>
     }if(props.masked){
         return(
             <MasquedInput/>
         );
-    }else{
+    }if(data){
         
         return (
 
@@ -184,17 +170,17 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                     disabled={props.readonly}
                 />
 
-                
                 <CountryInfoPanel 
-                    country={GetCountry(countries,selectedOption?.key)} 
+                    country={GetCountry(data,selectedOption?.key)} 
                     disabled={selectedOption?.key === undefined} 
                     displayicon={props.displayinfo}
                 />
 
             </Stack>               
-
-                       
+         
         );
+    }else{ //EMPTY
+        return (<div/>)
     }
 
 }
