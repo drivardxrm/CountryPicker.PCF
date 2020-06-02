@@ -62,7 +62,7 @@ export interface Country {
 
 
 
-export const GetCountry = (countries:Country[],countrykey:string|number) : Country | undefined => {
+export const GetCountry = (countries:Country[],countrykey:undefined|string|number) : Country | undefined => {
         
     var selectedCountry = countries.filter(c => c.alpha3Code === countrykey);
     return selectedCountry.length === 0 ? undefined : selectedCountry[0];

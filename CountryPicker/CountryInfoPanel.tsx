@@ -2,14 +2,12 @@ import * as React from "react";
 import { useState } from "react";
 import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
 import { useConstCallback } from "@uifabric/react-hooks";
-//import { useConstCallback } from "@fluentui/react";
-//import { FontIcon, ImageIcon} from "office-ui-fabric-react/lib/Icon";
-//import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Country,GetFlagUrl } from "./CountryUtils"
 
 //PROPS for component (received from caller)
 export interface ICountryInfoPanelProps {
     country: Country | undefined;
+    
     disabled: boolean;
     displayicon: boolean;
 }

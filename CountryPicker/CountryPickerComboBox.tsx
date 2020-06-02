@@ -1,10 +1,10 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useConst } from "@uifabric/react-hooks";
-import { initializeIcons, mergeStyles,Stack, VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react"; 
+import { initializeIcons,Stack, VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react"; 
 
 import useFetch from "use-http";
-import {Country,GetCountryName,GetCountry,GetFlagUrl} from "./CountryUtils"
+import {Country,GetCountryName,GetCountry} from "./CountryUtils"
 import CountryPickerComboBoxOption from "./CountryPickerOption"
 import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
@@ -31,27 +31,26 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
     //STATE HOOKS VARIABLES
     const [countries, setCountries] = useState<Country[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState<Country|undefined>(undefined);
 
     const [options, setOptions] = useState<IComboBoxOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
 
     //FETCH HOOK : Documentation => https://use-http.com/#/ 
-    const { data, error, loading  } = useFetch("https://restcountries.eu/rest/v2/all",{data: []},[]) 
+    const { data, error, loading  } = useFetch("https://restcountries.eu/rest/v2/all",undefined,[]) 
 
     //EFFECT HOOKS    
     //-Set Countries  when 'data' changes (when retrieved from API call) 
-    useEffect(() => {    
-        if(!loading && !error && data)
+    useLayoutEffect(() => {    
+        if(data)
         {
             setCountries(data as Country[])    
         } 
     }, [data]);
 
     //-Set options  when 'countries' changes
-    useEffect(() => {
+    useLayoutEffect(() => {
         
-        if(!loading && !error && data)
+        if(countries.length > 0)
         {
             setOptions(getOptions());
         } 
@@ -59,33 +58,28 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     }, [countries]);
 
     //SET selectedOption
-    useEffect(() => {
+    useLayoutEffect(() => {
         
-        if(!loading && !error && data)
+        if(options.length > 0)
         {
             setSelectedOption(getSelectedOption(props.countrycode))
         }
         
     }, [options,props.countrycode]);
 
-    //-Set 'selectedCountry' and Callback to PCF when 'selectedOption' changes 
+    //-Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
-        
-        if(!loading && !error && data)
-        {
-            if(selectedOption && 
-                (selectedCountry === undefined || selectedCountry?.alpha3Code !== selectedOption?.key)) {
-               
-                setSelectedCountry(GetCountry(countries,selectedOption.key));
-                props.onChange(selectedOption.key.toString(),selectedOption.text); 
-            } else if(selectedCountry === undefined && options.length > 1){ //Clear only if options are defined PREVENTS clear on init
+
+        if(options.length > 0){ //ensures that countries are loaded
+            if(selectedOption && props.countrycode !== selectedOption?.key) {
                 
-                setSelectedCountry(undefined);
+                props.onChange(selectedOption.key.toString(),selectedOption.text); 
+
+            } else if(selectedOption === undefined && props.countrycode !== ""){ 
+
                 props.onChange("","");
-            }
-        };
-        
-            
+            };
+        }
     }, [selectedOption]);
 
     //Get combobox options from countries
@@ -162,16 +156,13 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Loading...</div>
     }if(error){
         return <div>Error fetching data...</div>
-    }
-    if(countries.length === 0){
+    }if(countries.length === 0){
         return <div>No countries to display...</div>
-    }
-    if(props.masked){
+    }if(props.masked){
         return(
             <MasquedInput/>
         );
-    }
-    else{
+    }else{
         
         return (
 
@@ -195,8 +186,8 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
                 
                 <CountryInfoPanel 
-                    country={selectedCountry} 
-                    disabled={selectedCountry === undefined} 
+                    country={GetCountry(countries,selectedOption?.key)} 
+                    disabled={selectedOption?.key === undefined} 
                     displayicon={props.displayinfo}
                 />
 
