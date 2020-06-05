@@ -143,40 +143,38 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return(
             <MasquedInput/>
         );
-    }if(data){
-        
+    }else 
         return (
+            <>
+                {data && (
+                    <Stack  horizontal>
 
-            <Stack  horizontal>
-
-                <FlagIcon
-                    countrycode={selectedOption?.key.toString()}
-                />
-
-                <VirtualizedComboBox
-                    onRenderOption={CountryPickerComboBoxOption}
-                    onChange={onComboboxChanged}          
-                    selectedKey={selectedOption?.key}
-                    text={selectedOption?.text}
-                    allowFreeform={true}
-                    autoComplete="on"
-                    options={options}
-                    style={{width:"100%"}}
-                    disabled={props.readonly}
-                />
-
-                <CountryInfoPanel 
-                    country={GetCountry(data,selectedOption?.key)} 
-                    disabled={selectedOption?.key === undefined} 
-                    visible={props.displayinfo}
-                />
-
-            </Stack>               
-         
-        );
-    }else{ //EMPTY
-        return (<div/>)
-    }
+                        <FlagIcon
+                            countrycode={selectedOption?.key.toString()}
+                        />
+        
+                        <VirtualizedComboBox
+                            onRenderOption={CountryPickerComboBoxOption}
+                            onChange={onComboboxChanged}          
+                            selectedKey={selectedOption?.key}
+                            text={selectedOption?.text}
+                            allowFreeform={true}
+                            autoComplete="on"
+                            options={options}
+                            style={{width:"100%"}}
+                            disabled={props.readonly}
+                        />
+        
+                        <CountryInfoPanel 
+                            country={GetCountry(data,selectedOption?.key)} 
+                            disabled={selectedOption?.key === undefined} 
+                            visible={props.displayinfo}
+                        />
+    
+                    </Stack>      
+                )}
+            </>
+        )
 
 }
 
