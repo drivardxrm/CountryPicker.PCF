@@ -13,6 +13,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
 	private _props: ICountryPickerComboBoxProps = { 
+													//properties
 													countrycode: "",
 													language:"en", 
 													promoted:undefined,
@@ -20,6 +21,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 													displayinfo:true,
 													readonly:true,
 													masked:false,
+													//React component callback
 													onChange : this.notifyChange.bind(this)
 												};
 

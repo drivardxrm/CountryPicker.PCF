@@ -35,9 +35,9 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     //FETCH HOOK : Documentation => https://use-http.com/#/ 
     const { data, error, loading  } = useFetch<Country[]>("https://restcountries.eu/rest/v2/all",undefined,[]) 
 
-    //LAYOUTEFFECT HOOKS - Before render
+    //EFFECT HOOKS 
     //SET selectedOption 
-    useLayoutEffect(() => {
+    useEffect(() => {
         
         if(data && props.countrycode !== selectedOption?.key)
         {
@@ -46,7 +46,6 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         
     }, [data, props.countrycode]);
 
-    //EFFECT HOOKS - after render
     //-Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
 
@@ -101,8 +100,6 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return selected.length === 0 ? undefined : selected[0];
     };
 
-    
-
     //Sort functions for combobox options
     const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
 
@@ -142,8 +139,6 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Loading...</div>
     }if(error){
         return <div>Error fetching data...</div>
-
-        return <div>No countries to display...</div>
     }if(props.masked){
         return(
             <MasquedInput/>
@@ -173,7 +168,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                 <CountryInfoPanel 
                     country={GetCountry(data,selectedOption?.key)} 
                     disabled={selectedOption?.key === undefined} 
-                    displayicon={props.displayinfo}
+                    visible={props.displayinfo}
                 />
 
             </Stack>               
