@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FontIcon,ImageIcon,mergeStyles } from "@fluentui/react"; 
-import {Country,GetCountryName,GetCountry,GetFlagUrl} from "./CountryUtils"
+import { GetFlagUrl} from "./../utils/CountryUtils"
 
 export interface IFlagIconProps {
     countrycode: string|undefined;

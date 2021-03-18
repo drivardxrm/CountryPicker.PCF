@@ -1,7 +1,9 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPickerComboBox"
+
+import CountryPickerApp from "./components/CountryPickerApp";
+import { ICountryPickerComboBoxProps } from "./components/CountryPickerComboBox";
 
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -93,7 +95,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 		// RENDER React Component
 		ReactDOM.render(
-			React.createElement(CountryPickerComboBox,this._props),
+			React.createElement(CountryPickerApp,this._props),
 			this._container
 		);
 	}

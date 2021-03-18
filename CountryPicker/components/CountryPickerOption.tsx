@@ -1,6 +1,6 @@
 import * as React from "react";
 import {  ImageIcon, IComboBoxOption } from "@fluentui/react"; 
-import {GetFlagUrl} from "./CountryUtils"
+import {GetFlagUrl} from "./../utils/CountryUtils"
 
 
 const CountryPickerOption = (option:IComboBoxOption|undefined): JSX.Element => {

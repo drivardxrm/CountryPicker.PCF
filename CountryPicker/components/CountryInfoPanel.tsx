@@ -2,7 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
 import { useConstCallback } from "@uifabric/react-hooks";
-import { Country,GetFlagUrl } from "./CountryUtils"
+import { Country } from "../models/Country";
+import { GetFlagUrl } from "../utils/CountryUtils";
+
 
 //PROPS for component (received from caller)
 export interface ICountryInfoPanelProps {

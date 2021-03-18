@@ -3,12 +3,13 @@ import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { useConst } from "@uifabric/react-hooks";
 import { initializeIcons,Stack, VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react"; 
 
-import useFetch from "use-http";
-import {Country,GetCountryName,GetCountry} from "./CountryUtils"
+
+import { GetCountryName,GetCountry } from "./../utils/CountryUtils"
 import CountryPickerComboBoxOption from "./CountryPickerOption"
 import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
 import FlagIcon from "./FlagIcon"
+import { useCountries } from "../hooks/useCountries";
 
 //PROPS for component (received from caller)
 export interface ICountryPickerComboBoxProps {
@@ -24,16 +25,13 @@ export interface ICountryPickerComboBoxProps {
 
 const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
 
-    //INITIALISATION HOOK
-    useConst(()=>{
-        initializeIcons();
-    });
+    
     
     //STATE HOOKS VARIABLES
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
 
-    //FETCH HOOK : Documentation => https://use-http.com/#/ 
-    const { data, error, loading  } = useFetch<Country[]>("https://restcountries.eu/rest/v2/all",undefined,[]) 
+    //Custom Hook based on react-query and axios
+    const { isLoading, isError, data } = useCountries(props.limit);
 
     //EFFECT HOOKS 
     //SET selectedOption 
@@ -135,14 +133,12 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     } 
 
     //MAIN RENDERING
-    if(loading){
+    if(isLoading){
         return <div>Loading...</div>
-    }if(error){
+    }if(isError){
         return <div>Error fetching data...</div>
     }if(props.masked){
-        return(
-            <MasquedInput/>
-        );
+        return <MasquedInput/>
     }else 
         return (
             <>
