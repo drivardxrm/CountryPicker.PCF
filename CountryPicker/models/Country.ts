@@ -1,5 +1,7 @@
 //Extracted interface from this API : https://restcountries.eu/rest/v2/all
 
+import CountryInfoPanel from "../components/CountryInfoPanel";
+
 export interface Currency {
     code: string;
     name: string;
@@ -59,6 +61,8 @@ export interface Country {
     regionalBlocs: RegionalBloc[];
     cioc: string;
 }
+
+
 
 
 

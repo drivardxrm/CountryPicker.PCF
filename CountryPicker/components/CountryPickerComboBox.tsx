@@ -31,7 +31,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
 
     //Custom Hook based on react-query and axios
-    const { isLoading, isError, data } = useCountries(props.limit);
+    const { isLoading, isError, data } = useCountries(props.limit,props.promoted,props.language);
 
     //EFFECT HOOKS 
     //SET selectedOption 
@@ -39,7 +39,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         
         if(data && props.countrycode !== selectedOption?.key)
         {
-            setSelectedOption(getSelectedOption(props.countrycode))
+            //setSelectedOption(getSelectedOption(props.countrycode))
         }
         
     }, [data, props.countrycode]);
@@ -61,42 +61,42 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
 
     //MEMO HOOK
     //Get combobox options from countries - Executed only when data is first loaded, value is memoized afterward
-    const options = useMemo<IComboBoxOption[]>(()=> {
-        let comboboxoptions:IComboBoxOption[] = [];
-        if(data){
-            comboboxoptions = Array.from(data, i => { return {
-                key:i.alpha3Code,
-                text:GetCountryName(i,props.language)}
-            });
-            //filter out some values if 'limit' contains values                                                                     
-            if(props.limit){
-                comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
-            }
+    // const options = useMemo<IComboBoxOption[]>(()=> {
+    //     let comboboxoptions:IComboBoxOption[] = [];
+    //     if(data){
+    //         comboboxoptions = Array.from(data, i => { return {
+    //             key:i.alpha3Code,
+    //             text:GetCountryName(i,props.language)}
+    //         });
+    //         //filter out some values if 'limit' contains values                                                                     
+    //         if(props.limit){
+    //             comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
+    //         }
     
-            //sort alphabetically by country name
-            comboboxoptions.sort(sortByCountryName)
+    //         //sort alphabetically by country name
+    //         comboboxoptions.sort(sortByCountryName)
     
-            //sort if 'promoted' (Will bubble up promoted countries)
-            if(props.promoted){
-                comboboxoptions.sort(sortByPromoted)
-            }
-        }
-        return comboboxoptions;
+    //         //sort if 'promoted' (Will bubble up promoted countries)
+    //         if(props.promoted){
+    //             comboboxoptions.sort(sortByPromoted)
+    //         }
+    //     }
+    //     return comboboxoptions;
 
-    },[data]); //dependency 
+    // },[data]); //dependency 
 
     
 
     //Get an option by countrycode (Assumes that country code are unique)
-    const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
+    // const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
         
-        if(countrycode === ""){
-            return undefined;
-        };
+    //     if(countrycode === ""){
+    //         return undefined;
+    //     };
 
-        let selected = options.filter(o => o.key === countrycode);
-        return selected.length === 0 ? undefined : selected[0];
-    };
+    //     let selected = data.filter(o => o.key === countrycode);
+    //     return selected.length === 0 ? undefined : selected[0];
+    // };
 
     //Sort functions for combobox options
     const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
@@ -156,13 +156,13 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                             text={selectedOption?.text}
                             allowFreeform={true}
                             autoComplete="on"
-                            options={options}
+                            options={data}
                             style={{width:"100%"}}
                             disabled={props.readonly}
                         />
         
                         <CountryInfoPanel 
-                            country={GetCountry(data,selectedOption?.key)} 
+                            countrycode={selectedOption?.key?.toString() || ""} 
                             disabled={selectedOption?.key === undefined} 
                             visible={props.displayinfo}
                         />

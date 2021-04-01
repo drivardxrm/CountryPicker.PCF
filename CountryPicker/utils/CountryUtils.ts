@@ -1,5 +1,5 @@
-//Extracted interface from this API : https://restcountries.eu/rest/v2/all
 
+import CountryInfoPanel from "../components/CountryInfoPanel";
 import { Country } from "../models/Country";
 
 
@@ -52,6 +52,7 @@ export const GetCountryName = (country:Country, language:string):string => {
     }
     return name;
 }
+
 
 
 
