@@ -39,7 +39,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         
         if(data && props.countrycode !== selectedOption?.key)
         {
-            //setSelectedOption(getSelectedOption(props.countrycode))
+            setSelectedOption(getSelectedOption(props.countrycode))
         }
         
     }, [data, props.countrycode]);
@@ -88,43 +88,16 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
     
 
     //Get an option by countrycode (Assumes that country code are unique)
-    // const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
+    const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
         
-    //     if(countrycode === ""){
-    //         return undefined;
-    //     };
+         if(countrycode === ""){
+             return undefined;
+         };
 
-    //     let selected = data.filter(o => o.key === countrycode);
-    //     return selected.length === 0 ? undefined : selected[0];
-    // };
+         return  data?.filter(o => o.key === countrycode)[0];
+     };
 
-    //Sort functions for combobox options
-    const sortByCountryName = (a:IComboBoxOption,b:IComboBoxOption):number => {
 
-        if (a.text > b.text) return 1;
-        if (b.text > a.text) return -1;
-
-        return 0;
-    }
-
-    const sortByPromoted = (a:IComboBoxOption,b:IComboBoxOption):number => {
-        let ranka = promotedRank(a.key);
-        let rankb = promotedRank(b.key);
-           
-        if (ranka > rankb) return 1;
-        if (rankb > ranka) return -1;
-
-        return 0;
-    }
-
-    // Rank of a given country compared to the 'promoted' countri list. 
-    //Ex. promoted = [USA,CAN,MEX], USA=1, CAN=2, MEX=3, COL=0. If promoted is empty rank = 0 for all countries
-    const promotedRank = (countrykey:string | number):Number => {
-
-        var last = props.promoted?.length ?? 0;
-        var rank = props.promoted?.indexOf(countrykey.toString()) ?? last;
-        return rank < 0 ? last : rank;
-    }
             
     //EVENTS
     //- When value of combobox changes, Change selected option and callback to PCF
@@ -159,13 +132,15 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                             options={data}
                             style={{width:"100%"}}
                             disabled={props.readonly}
+                            
                         />
-        
-                        <CountryInfoPanel 
-                            countrycode={selectedOption?.key?.toString() || ""} 
-                            disabled={selectedOption?.key === undefined} 
-                            visible={props.displayinfo}
-                        />
+                        {props.displayinfo &&(
+                            <CountryInfoPanel 
+                                countrycode={selectedOption?.key?.toString() || ""} 
+                                disabled={selectedOption?.key === undefined} 
+                            />
+                        )}
+                        
     
                     </Stack>      
                 )}

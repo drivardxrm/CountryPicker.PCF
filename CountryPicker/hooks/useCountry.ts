@@ -12,4 +12,6 @@ const getCountry = async (countrycode:string):Promise<Country> => {
 };
 
 export const useCountry = (countrycode:string): QueryObserverResult<Country, unknown> =>
-  useQuery(["country", { countrycode }], () => getCountry(countrycode));
+  useQuery(["country", { countrycode }],          
+            () => getCountry(countrycode),      
+            {enabled: countrycode?.length > 1}); //enabled switch = will only be called when there is a country passed and the panel is opened
