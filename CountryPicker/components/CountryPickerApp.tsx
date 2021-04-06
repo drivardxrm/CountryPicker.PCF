@@ -1,6 +1,8 @@
 import { initializeIcons } from "@fluentui/react/lib/Icons";
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import IViewModel from "../services/ViewModel";
+import {ViewModelProvider} from "../services/ViewModelProvider";
 
 
 import CountryPickerComboBox, { ICountryPickerComboBoxProps } from "./CountryPickerComboBox";
@@ -22,9 +24,11 @@ const queryClient = new QueryClient({
   },
 });
 
-const CountryPickerApp = (props: ICountryPickerComboBoxProps): JSX.Element => (
+const CountryPickerApp = (viewmodel:IViewModel): JSX.Element => (
   <QueryClientProvider client={queryClient}>
-      <CountryPickerComboBox {...props}></CountryPickerComboBox>
+    <ViewModelProvider viewmodel={viewmodel}>
+      <CountryPickerComboBox></CountryPickerComboBox>
+    </ViewModelProvider>    
   </QueryClientProvider>
 );
 

@@ -9,84 +9,58 @@ import CountryPickerComboBoxOption from "./CountryPickerOption"
 import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
 import FlagIcon from "./FlagIcon"
-import { useCountries } from "../hooks/useCountries";
+import { useCountriesAsOptions } from "../hooks/useCountries";
+import { useViewModel } from "../services/ViewModelProvider";
 
 //PROPS for component (received from caller)
 export interface ICountryPickerComboBoxProps {
-    countrycode: string;
-    language: string;
-    promoted: string[]|undefined;
-    limit: string[]|undefined;
-    displayinfo : boolean;
-    readonly: boolean;
-    masked: boolean;
-    onChange: (countrycode:string,countryname:string) => void;
+    //countrycode: string;
+    // language: string;
+    // promoted: string[]|undefined;
+    // limit: string[]|undefined;
+    //displayinfo : boolean;
+    //readonly: boolean;
+    //masked: boolean;
+    //onChange: (countrycode:string,countryname:string) => void;
 }
 
-const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element => {
+const CountryPickerComboBox = ():JSX.Element => {
 
-    
+    const vm = useViewModel();
     
     //STATE HOOKS VARIABLES
     const [selectedOption, setSelectedOption] = useState<IComboBoxOption|undefined>(undefined);
 
     //Custom Hook based on react-query and axios
-    const { isLoading, isError, data } = useCountries(props.limit,props.promoted,props.language);
+    const { data: options, isLoading, isError } = useCountriesAsOptions();
 
     //EFFECT HOOKS 
     //SET selectedOption 
     useEffect(() => {
         
-        if(data && props.countrycode !== selectedOption?.key)
+        if(options && vm.countrycode !== selectedOption?.key)
         {
-            setSelectedOption(getSelectedOption(props.countrycode))
+            setSelectedOption(getSelectedOption(vm.countrycode))
         }
         
-    }, [data, props.countrycode]);
+    }, [options, vm.countrycode]);
 
     //-Callback to PCF when 'selectedOption' changes 
     useEffect(() => {
 
-        if(data){ //ensures that countries are loaded
-            if(selectedOption && props.countrycode !== selectedOption?.key) {
+        if(options){ //ensures that countries are loaded
+            if(selectedOption && vm.countrycode !== selectedOption?.key) {
                 
-                props.onChange(selectedOption.key.toString(),selectedOption.text); 
+                vm.onChange(selectedOption.key.toString(),selectedOption.text); 
 
-            } else if(selectedOption === undefined && props.countrycode.length === 3){ 
+            } else if(selectedOption === undefined && vm.countrycode.length === 3){ 
 
-                props.onChange("","");
+                vm.onChange("","");
             };
         }
     }, [selectedOption]);
 
-    //MEMO HOOK
-    //Get combobox options from countries - Executed only when data is first loaded, value is memoized afterward
-    // const options = useMemo<IComboBoxOption[]>(()=> {
-    //     let comboboxoptions:IComboBoxOption[] = [];
-    //     if(data){
-    //         comboboxoptions = Array.from(data, i => { return {
-    //             key:i.alpha3Code,
-    //             text:GetCountryName(i,props.language)}
-    //         });
-    //         //filter out some values if 'limit' contains values                                                                     
-    //         if(props.limit){
-    //             comboboxoptions = comboboxoptions.filter(i => props.limit != undefined && props.limit.includes(i.key.toString()))
-    //         }
     
-    //         //sort alphabetically by country name
-    //         comboboxoptions.sort(sortByCountryName)
-    
-    //         //sort if 'promoted' (Will bubble up promoted countries)
-    //         if(props.promoted){
-    //             comboboxoptions.sort(sortByPromoted)
-    //         }
-    //     }
-    //     return comboboxoptions;
-
-    // },[data]); //dependency 
-
-    
-
     //Get an option by countrycode (Assumes that country code are unique)
     const getSelectedOption = (countrycode:string) : IComboBoxOption | undefined => {
         
@@ -94,7 +68,7 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
              return undefined;
          };
 
-         return  data?.filter(o => o.key === countrycode)[0];
+         return  options?.filter(o => o.key === countrycode)[0];
      };
 
 
@@ -110,12 +84,12 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
         return <div>Loading...</div>
     }if(isError){
         return <div>Error fetching data...</div>
-    }if(props.masked){
+    }if(vm.masked){ 
         return <MasquedInput/>
     }else 
         return (
             <>
-                {data && (
+                {options && (
                     <Stack  horizontal>
 
                         <FlagIcon
@@ -129,12 +103,12 @@ const CountryPickerComboBox = (props : ICountryPickerComboBoxProps): JSX.Element
                             text={selectedOption?.text}
                             allowFreeform={true}
                             autoComplete="on"
-                            options={data}
+                            options={options}
                             style={{width:"100%"}}
-                            disabled={props.readonly}
+                            disabled={vm.readonly}
                             
                         />
-                        {props.displayinfo &&(
+                        {vm.displayinfo &&(
                             <CountryInfoPanel 
                                 countrycode={selectedOption?.key?.toString() || ""} 
                                 disabled={selectedOption?.key === undefined} 

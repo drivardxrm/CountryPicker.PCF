@@ -1,11 +1,10 @@
 import * as React from "react";
-import { useState } from "react";
 import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
-import { useConstCallback } from "@uifabric/react-hooks";
-import { Country } from "../models/Country";
+
 import { GetFlagUrl } from "../utils/CountryUtils";
-import { useCountry } from "../hooks/useCountry";
+//import { useCountry } from "../hooks/useCountry";
 import { useBoolean } from "../hooks/useBoolean";
+import { useCountry } from "../hooks/useCountries";
 
 
 //PROPS for component (received from caller)
