@@ -5,6 +5,7 @@ import {GetFlagUrl} from "./../utils/CountryUtils"
 
 const CountryPickerOption = (option:IComboBoxOption|undefined): JSX.Element => {
  
+    
     return (
         <div>
             {option && option.key && (

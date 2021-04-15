@@ -2,23 +2,14 @@ import * as React from "react";
 import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
 
 import { GetFlagUrl } from "../utils/CountryUtils";
-//import { useCountry } from "../hooks/useCountry";
 import { useBoolean } from "../hooks/useBoolean";
-import { useCountry } from "../hooks/useCountries";
+import { useSelectedCountry } from "../hooks/useCountries";
 
 
-//PROPS for component (received from caller)
-export interface ICountryInfoPanelProps {
-    //country: Country | undefined;
-    countrycode:string;
-    disabled: boolean;
-}
-
-const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
-
+const CountryInfoPanel = (): JSX.Element => {
 
     const [isOpen, openPanel, dismissPanel] = useBoolean(false);
-    const { data } = useCountry(props.countrycode);
+    const { data } = useSelectedCountry();
 
     //STYLES
     const flagIconClass = mergeStyles({
@@ -41,7 +32,7 @@ const CountryInfoPanel = (props : ICountryInfoPanelProps): JSX.Element => {
     return(
         <>                                                               
             
-            <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={props.disabled} onClick={openPanel} />
+            <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={data === undefined} onClick={openPanel} />
 
             <Panel
                 isLightDismiss

@@ -1,13 +1,21 @@
 
-import CountryInfoPanel from "../components/CountryInfoPanel";
+import axios from "axios";
 import { Country } from "../models/Country";
 
 
-export const GetCountry = (countries:Country[],countrykey:undefined|string|number) : Country | undefined => {
-        
-    var selectedCountry = countries.filter(c => c.alpha3Code === countrykey);
-    return selectedCountry.length === 0 ? undefined : selectedCountry[0];
-}
+
+export const getCountries = async (limit: string[] | undefined):Promise<Country[]> => {
+    //If country list is limited, Fetch only the needed countries
+    console.log("--fetching countries--");
+  
+    //fetch data from external api
+    const { data } = limit?.some
+      ? await axios.get<Country[]>("https://restcountries.eu/rest/v2/alpha?codes=" + limit.join(";"))
+      : await axios.get<Country[]>("https://restcountries.eu/rest/v2/all");
+  
+    return data;
+    
+  };
 
 export const GetFlagUrl = (key:string|number|undefined):string => 
         "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"

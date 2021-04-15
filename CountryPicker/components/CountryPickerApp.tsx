@@ -5,15 +5,11 @@ import IViewModel from "../services/ViewModel";
 import {ViewModelProvider} from "../services/ViewModelProvider";
 
 
-import CountryPickerComboBox, { ICountryPickerComboBoxProps } from "./CountryPickerComboBox";
+import CountryPickerComboBox from "./CountryPickerComboBox";
 //initilize icons
 initializeIcons();
 
-// export interface ICountryPickerAppProps {
-//   pcfcontext: ComponentFramework.Context<IInputs>;
-//   onChange: (countrycode: string, countryname: string) => void;
-// }
-
+//declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,12 +20,17 @@ const queryClient = new QueryClient({
   },
 });
 
-const CountryPickerApp = (viewmodel:IViewModel): JSX.Element => (
-  <QueryClientProvider client={queryClient}>
-    <ViewModelProvider viewmodel={viewmodel}>
-      <CountryPickerComboBox></CountryPickerComboBox>
-    </ViewModelProvider>    
-  </QueryClientProvider>
-);
+const CountryPickerApp = (viewmodel:IViewModel): JSX.Element => 
+{
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ViewModelProvider viewmodel={viewmodel}>
+        <CountryPickerComboBox></CountryPickerComboBox>
+      </ViewModelProvider>    
+    </QueryClientProvider>
+  );
+
+} 
 
 export default CountryPickerApp;

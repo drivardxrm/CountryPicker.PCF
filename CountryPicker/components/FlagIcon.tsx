@@ -1,13 +1,16 @@
 import * as React from "react";
 import { FontIcon,ImageIcon,mergeStyles } from "@fluentui/react"; 
 import { GetFlagUrl} from "./../utils/CountryUtils"
+import { useSelectedCountry } from "../hooks/useCountries";
 
-export interface IFlagIconProps {
-    countrycode: string|undefined;
-}
+
 
 //If country is defined display flag, otherwise display Globe icon
-const FlagIcon = (props:IFlagIconProps):JSX.Element => {
+const FlagIcon = ():JSX.Element => {
+
+
+    const {data:selectedcountry} = useSelectedCountry();
+    
 
     const flagiconclass = mergeStyles({
         fontSize: 30,
@@ -17,8 +20,8 @@ const FlagIcon = (props:IFlagIconProps):JSX.Element => {
     });
 
 
-    return props.countrycode  ?
-        <ImageIcon className={flagiconclass} imageProps={{src:GetFlagUrl(props.countrycode), height:"100%", width:"100%"}}/> :
+    return selectedcountry !== undefined  ?
+        <ImageIcon className={flagiconclass} imageProps={{src:GetFlagUrl(selectedcountry.alpha3Code), height:"100%", width:"100%"}}/> :
         <FontIcon iconName="Globe" className={flagiconclass} />
 }
 export default FlagIcon;

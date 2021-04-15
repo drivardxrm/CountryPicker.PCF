@@ -1,10 +1,7 @@
 import * as React from "react";
-import { useState } from "react";
 import { useContext } from "react";
 
 import IViewModel from "./ViewModel";
-import ViewModel from "./ViewModel";
-
 
 
 interface ViewModelProviderProps {

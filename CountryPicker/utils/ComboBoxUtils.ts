@@ -1,9 +1,18 @@
 import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
+import { Country } from "../models/Country";
+import { GetCountryName } from "./CountryUtils";
 
-
+export const asComboboxOptions = (data:Country[],promoted: string[] | undefined, language:string) => data.map(c => (
+    {
+      key:c.alpha3Code,
+      text:GetCountryName(c,language)
+    }
+  ))
+  .sort(sortByOptionText)
+  .sort(sortByPromoted(promoted));
 
 //Sort functions for combobox options
-export const sortByOptionText = (a:IComboBoxOption,b:IComboBoxOption):number => {
+const sortByOptionText = (a:IComboBoxOption,b:IComboBoxOption):number => {
 
     if (a.text > b.text) return 1;
     if (b.text > a.text) return -1;
@@ -12,7 +21,7 @@ export const sortByOptionText = (a:IComboBoxOption,b:IComboBoxOption):number => 
 }
   
 // Bubble up 'promoted' keys list to be on top. 
-export function sortByPromoted(promoted:string[] | undefined) {
+function sortByPromoted(promoted:string[] | undefined) {
     return function (a:IComboBoxOption,b:IComboBoxOption):number {
 
         const last = promoted?.length ?? 0;

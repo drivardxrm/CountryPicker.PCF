@@ -1,6 +1,6 @@
-
 interface IViewModel{ 
   
+  //view props
   countrycode: string;
   language: "en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa";
   promoted: string[]|undefined;
@@ -8,6 +8,8 @@ interface IViewModel{
   displayinfo : boolean;
   readonly: boolean;
   masked: boolean;
+
+  //callback function to PCF
   onChange: (countrycode:string,countryname:string) => void;
 
 }
