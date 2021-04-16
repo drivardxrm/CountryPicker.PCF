@@ -1,6 +1,9 @@
 import * as React from "react";
-import { mergeStyles, FontIcon, ImageIcon,Image, IconButton, Panel} from "@fluentui/react"; 
-
+import { mergeStyles } from "@fluentui/react/lib/Styling"; 
+import { FontIcon, ImageIcon } from "@fluentui/react/lib/Icon"; 
+import { Image } from "@fluentui/react/lib/Image"; 
+import { IconButton } from "@fluentui/react/lib/Button"; 
+import { Panel } from "@fluentui/react/lib/Panel"; 
 import { GetFlagUrl } from "../utils/CountryUtils";
 import { useBoolean } from "../hooks/useBoolean";
 import { useSelectedCountry } from "../hooks/useCountries";

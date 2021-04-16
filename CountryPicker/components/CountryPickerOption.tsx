@@ -1,5 +1,7 @@
 import * as React from "react";
-import {  ImageIcon, IComboBoxOption } from "@fluentui/react"; 
+import {  ImageIcon } from "@fluentui/react/lib/Icon"; 
+import {  IComboBoxOption } from "@fluentui/react/lib/ComboBox"; 
+
 import {GetFlagUrl} from "./../utils/CountryUtils"
 
 

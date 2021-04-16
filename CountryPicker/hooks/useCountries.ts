@@ -6,6 +6,7 @@ import { useViewModel } from "../services/ViewModelProvider";
 import { asComboboxOptions } from "../utils/ComboBoxUtils";
 
 
+//main generic query. you can pass a selector function or leave blank
 const useCountries = (select:any):UseQueryResult<any,unknown> => {
   const vm = useViewModel();
   

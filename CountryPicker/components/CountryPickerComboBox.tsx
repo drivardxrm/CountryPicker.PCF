@@ -1,5 +1,7 @@
 import * as React from "react";
-import { Stack, VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react"; 
+import { Stack } from "@fluentui/react/lib/Stack"; 
+import { VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react/lib/ComboBox"; 
+
 import CountryPickerComboBoxOption from "./CountryPickerOption"
 import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
