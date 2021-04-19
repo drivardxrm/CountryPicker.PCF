@@ -1,6 +1,6 @@
 import { initializeIcons } from "@fluentui/react/lib/Icons";
 import * as React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query"
 import IViewModel from "../services/ViewModel";
 import {ViewModelProvider} from "../services/ViewModelProvider";
 

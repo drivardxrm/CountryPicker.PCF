@@ -2,13 +2,22 @@
 import axios from "axios";
 import { Country } from "../models/Country";
 
-
+export const getAllCountries = async ():Promise<Country[]> => {
+    
+    console.log("--fetching all countries--");
+  
+    //If country list is limited, Fetch only the needed countries
+    const { data } = await axios.get<Country[]>("https://restcountries.eu/rest/v2/all");
+  
+    return data;
+    
+};
 
 export const getCountries = async (limit: string[] | undefined):Promise<Country[]> => {
-    //If country list is limited, Fetch only the needed countries
-    console.log("--fetching countries--");
+    
+    console.log("--fetching countries--" + limit?.join(";") ?? "");
   
-    //fetch data from external api
+    //If country list is limited, Fetch only the needed countries
     const { data } = limit?.some
       ? await axios.get<Country[]>("https://restcountries.eu/rest/v2/alpha?codes=" + limit.join(";"))
       : await axios.get<Country[]>("https://restcountries.eu/rest/v2/all");

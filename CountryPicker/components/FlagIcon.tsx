@@ -9,7 +9,7 @@ import { useSelectedCountry } from "../hooks/useCountries";
 const FlagIcon = ():JSX.Element => {
 
 
-    const {data:selectedcountry} = useSelectedCountry();
+    const {selectedcountry} = useSelectedCountry();
     
 
     const flagiconclass = mergeStyles({

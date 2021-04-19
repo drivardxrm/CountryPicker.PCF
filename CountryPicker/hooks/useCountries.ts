@@ -1,54 +1,67 @@
-import { useQuery, UseQueryResult } from "react-query";
+import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import { Country } from "../models/Country";
 import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
-import { getCountries, GetCountryName } from "../utils/CountryUtils";
+import { getAllCountries, getCountries, GetCountryName } from "../utils/CountryUtils";
 import { useViewModel } from "../services/ViewModelProvider";
 import { asComboboxOptions } from "../utils/ComboBoxUtils";
 
 
-//main generic query. you can pass a selector function or leave blank
-const useCountries = (select:any):UseQueryResult<any,unknown> => {
-  const vm = useViewModel();
+const useCountries = () => {
   
-  return useQuery(["countries"],
-            () => getCountries(vm.limit),
-            {select});
-}
+  const vm = useViewModel(); 
 
-//public hooks
-export const useCountriesAsOptions = (): UseQueryResult<IComboBoxOption[], unknown> => {
-  const vm = useViewModel();
+  const { data, isLoading, isError } = useQuery<Country[],Error>(["countries"],
+            () => getAllCountries());
 
-  return useCountries((data:Country[]) => asComboboxOptions(data,vm.promoted,vm.language));
-}
+  const filterdcountries = data?.filter(c => vm.limit === undefined || vm.limit.includes(c.alpha3Code)) //Filter 
 
-
-export const useSelectedCountry = ():UseQueryResult<Country | undefined, unknown> => {
-
-  const vm = useViewModel();
-
-  return useCountries(
-    (data:Country[]) => 
-      data.find((country) => country.alpha3Code === vm.countrycode));
+  return {countries:filterdcountries, isLoading, isError}
 }
 
 
-export const useSelectedCountryAsOption = (): UseQueryResult<IComboBoxOption | undefined, unknown> => {
+//PUBLIC Hooks
+export const useCountryOptions = () => {
+  const vm = useViewModel(); 
+
+  const { countries, isLoading, isError } = useCountries();
+
+  const options = countries ? asComboboxOptions(countries,vm) : undefined;
+
+  return {options,isLoading,isError};
+
+}
+
+export const useSelectedCountry = () => {
+
   const vm = useViewModel();
 
-  return useCountries(
-    (data:Country[]) => {
-      const selectedcountry = data.find((country) => country.alpha3Code === vm.countrycode);
-      if(selectedcountry){
-        return {
+  const { countries, isLoading, isError } = useCountries();
+
+  const selectedcountry = countries?.find((country) => country.alpha3Code === vm.countrycode)
+
+  return {selectedcountry,isLoading,isError};
+
+
+}
+
+export const useSelectedOption = () => {
+
+  const vm = useViewModel();
+
+  const { selectedcountry, isLoading, isError } = useSelectedCountry();
+
+  const selectedoption = selectedcountry ? 
+        {
           key:selectedcountry.alpha3Code,
           text:GetCountryName(selectedcountry,vm.language)
-        }
-      }
-      return undefined
-    }
-  )
+        } :
+        undefined;
+  
+
+  return {selectedoption,isLoading,isError};
+
 }
+
   
 
 

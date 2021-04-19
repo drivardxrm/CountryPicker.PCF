@@ -1,15 +1,16 @@
 import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
 import { Country } from "../models/Country";
+import IViewModel from "../services/ViewModel";
 import { GetCountryName } from "./CountryUtils";
 
-export const asComboboxOptions = (data:Country[],promoted: string[] | undefined, language:string) => data.map(c => (
+export const asComboboxOptions = (data:Country[],vm:IViewModel) => data.map(c => (
     {
       key:c.alpha3Code,
-      text:GetCountryName(c,language)
+      text:GetCountryName(c,vm.language)
     }
   ))
-  .sort(sortByOptionText)
-  .sort(sortByPromoted(promoted));
+  .sort(sortByOptionText)                                    //sort by key
+  .sort(sortByPromoted(vm.promoted));                           //bubbleup promoted countries   
 
 //Sort functions for combobox options
 const sortByOptionText = (a:IComboBoxOption,b:IComboBoxOption):number => {

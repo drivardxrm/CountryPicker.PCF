@@ -9,13 +9,13 @@
     "start": "pcf-scripts start"
   },
   "dependencies": {
-    "@fluentui/react": "^8.5.1",
+    "@fluentui/react": "^8.11.0",
     "@types/node": "^14.14.35",
     "@types/powerapps-component-framework": "^1.2.3",
     "axios": "^0.21.1",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-query": "^3.13.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.13.10"
   },
   "devDependencies": {
     "pcf-scripts": "^1.5.5",

@@ -12,7 +12,7 @@ import { useSelectedCountry } from "../hooks/useCountries";
 const CountryInfoPanel = (): JSX.Element => {
 
     const [isOpen, openPanel, dismissPanel] = useBoolean(false);
-    const { data } = useSelectedCountry();
+    const { selectedcountry } = useSelectedCountry();
 
     //STYLES
     const flagIconClass = mergeStyles({
@@ -35,11 +35,11 @@ const CountryInfoPanel = (): JSX.Element => {
     return(
         <>                                                               
             
-            <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={data === undefined} onClick={openPanel} />
+            <IconButton iconProps={{ iconName: 'Info' }} title="info" ariaLabel="info" disabled={selectedcountry === undefined} onClick={openPanel} />
 
             <Panel
                 isLightDismiss
-                headerText={data?.name + " (" + data?.alpha3Code + ")"}
+                headerText={selectedcountry?.name + " (" + selectedcountry?.alpha3Code + ")"}
                 headerClassName={bold}
                 isOpen={isOpen}
                 onDismiss={dismissPanel}
@@ -48,35 +48,35 @@ const CountryInfoPanel = (): JSX.Element => {
             >
                 
                 <Image
-                    src={GetFlagUrl(data?.alpha3Code)}
+                    src={GetFlagUrl(selectedcountry?.alpha3Code)}
                     alt="flag"
                     width={150}
                 />
                 
                 <br/>
                 <FontIcon iconName="Globe2" className={panelIconClass} /><span className={bold}>Region/Subregion : </span><br/>
-                <span>{data?.region}/{data?.subregion}</span><br/><br/>
+                <span>{selectedcountry?.region}/{selectedcountry?.subregion}</span><br/><br/>
     
                 <FontIcon iconName="GlobeFavorite" className={panelIconClass} /><span className={bold}>Capital :</span><br/>
-                <span>{data?.capital}</span><br/><br/>
+                <span>{selectedcountry?.capital}</span><br/><br/>
     
                 <FontIcon iconName="Family" className={panelIconClass} /><span className={bold}>Population : </span><br/>
-                <span>{data?.population?.toLocaleString("en")}</span><br/><br/>
+                <span>{selectedcountry?.population?.toLocaleString("en")}</span><br/><br/>
     
                 <FontIcon iconName="AllCurrency" className={panelIconClass} /><span className={bold}>Currencies : </span><br/>
-                {data?.currencies?.map((c,i) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
+                {selectedcountry?.currencies?.map((c,i) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
     
                 <FontIcon iconName="Phone" className={panelIconClass} /><span className={bold}>Calling codes : </span>
-                {data?.callingCodes?.map((c,i) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
+                {selectedcountry?.callingCodes?.map((c,i) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Clock" className={panelIconClass} /><span className={bold}>Timezones : </span>
-                {data?.timezones?.map((t,i) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
+                {selectedcountry?.timezones?.map((t,i) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Feedback" className={panelIconClass} /><span className={bold}>Languages : </span>
-                {data?.languages?.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
+                {selectedcountry?.languages?.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
-                {data?.borders?.map((b,i) => {return <div key={'border-'+i}><ImageIcon className={flagIconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
+                {selectedcountry?.borders?.map((b,i) => {return <div key={'border-'+i}><ImageIcon className={flagIconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
             </Panel>
 
         </>
