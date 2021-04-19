@@ -1,7 +1,9 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import CountryPickerComboBox, {ICountryPickerComboBoxProps} from "./CountryPickerComboBox"
+
+import CountryPickerApp from "./components/CountryPickerApp";
+import IViewModel from "./services/ViewModel";
 
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -12,18 +14,20 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 	private _notifyOutputChanged:() => void;
 	private _container: HTMLDivElement;
-	private _props: ICountryPickerComboBoxProps = { 
-													//properties
-													countrycode: "",
-													language:"en", 
-													promoted:undefined,
-													limit:undefined,
-													displayinfo:true,
-													readonly:true,
-													masked:false,
-													//React component callback
-													onChange : this.notifyChange.bind(this)
-												};
+	
+
+	private _viewmodel: IViewModel = { 
+										//properties
+										countrycode: "",
+										language:"en", 
+										promoted:undefined,
+										limit:undefined,
+										displayinfo:true,
+										readonly:true,
+										masked:false,
+										//React component callback
+										onChange : this.notifyChange.bind(this)
+									};
 
 	/**
 	 * Empty constructor.
@@ -81,19 +85,19 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
-		//Prepare Props for React Component
-		this._props.countrycode = this._selectedCode;
-		this._props.language = context.parameters.language.raw || "en";
-		this._props.promoted = context.parameters.promoted.raw?.split(',') || undefined;
-		this._props.displayinfo = context.parameters.displayinfo.raw === "true"
+		//Prepare ViewModel
+		this._viewmodel.countrycode = this._selectedCode;
+		this._viewmodel.language = context.parameters.language.raw || "en";
+		this._viewmodel.promoted = context.parameters.promoted.raw?.split(',') || undefined;
+		this._viewmodel.displayinfo = context.parameters.displayinfo.raw === "true"
 		//harness will put 'val' by default so I want to treat this value as null
-		this._props.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
-		this._props.readonly = isReadOnly;
-		this._props.masked = isMasked;
+		this._viewmodel.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
+		this._viewmodel.readonly = isReadOnly;
+		this._viewmodel.masked = isMasked;
 
 		// RENDER React Component
 		ReactDOM.render(
-			React.createElement(CountryPickerComboBox,this._props),
+			React.createElement(CountryPickerApp,this._viewmodel),
 			this._container
 		);
 	}
