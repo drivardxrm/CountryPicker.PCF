@@ -1,6 +1,8 @@
 # CountryPicker.PCF
 Country Picker PCF (PowerApps Component framework) Control that turns a PowerApps text field into a Combobox displaying country names and flags.
 
+* Download latest version here : https://github.com/drivardxrm/CountryPicker.PCF/releases/latest
+
 #### Features:
 
 * Promote some countries to appear first in the combobox.
@@ -14,9 +16,12 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 
 # Dependencies
-office-ui-fabric-react : https://github.com/OfficeDev/office-ui-fabric-react
+FluentUI : https://github.com/microsoft/fluentui
 
-use-http : http://use-http.com/#/
+react-query : https://react-query.tanstack.com/
+
+axios: https://axios-http.com/
+
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
