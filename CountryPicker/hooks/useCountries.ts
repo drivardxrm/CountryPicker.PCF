@@ -1,7 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import { Country } from "../models/Country";
-import { IComboBoxOption } from "@fluentui/react/lib/ComboBox";
-import { getAllCountries, getCountries, GetCountryName } from "../utils/CountryUtils";
+import { getAllCountries, GetCountryName } from "../utils/CountryUtils";
 import { useViewModel } from "../services/ViewModelProvider";
 import { asComboboxOptions } from "../utils/ComboBoxUtils";
 
@@ -43,6 +42,7 @@ export const useSelectedCountry = () => {
 
 
 }
+
 
 export const useSelectedOption = () => {
 
