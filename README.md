@@ -13,7 +13,7 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 * Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
 
-* Country information comes from this public API project : https://restcountries.eu/  
+* Country information comes from this public API project : https://restcountries.com/  
 ##### DISCLAIMER : The author of the project is not responsible for the accuracy of the content of the API
 
 
