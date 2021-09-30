@@ -7,14 +7,14 @@ export const getAllCountries = async ():Promise<Country[]> => {
     //console.log("--fetching all countries--");
   
     //If country list is limited, Fetch only the needed countries
-    const { data } = await axios.get<Country[]>("https://restcountries.eu/rest/v2/all");
+    const { data } = await axios.get<Country[]>("https://restcountries.com/v2/all");
   
     return data;
     
 };
 
 export const GetFlagUrl = (key:string|number|undefined):string => 
-        "https://restcountries.eu/data/" + key?.toString().toLowerCase() + ".svg"
+        "https://restcountries.com/data/" + key?.toString().toLowerCase() + ".svg"
 
 export const GetCountryName = (country:Country, language:string):string => {
 
