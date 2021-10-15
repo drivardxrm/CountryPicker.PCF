@@ -3,6 +3,8 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 * Download latest version here : https://github.com/drivardxrm/CountryPicker.PCF/releases/latest
 
+#### IMPORTANT : DON'T USE VERSION PRIOR TO v1.0.0.8 , THE API ROOT AS CHANGED FOR FETCHING THE COUNTRY DATA 
+
 #### Features:
 
 * Promote some countries to appear first in the combobox.
@@ -11,7 +13,7 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 * Country names available in several languages. (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)
 
-* Country information comes from this public API project : https://restcountries.eu/  
+* Country information comes from this public API project : https://restcountries.com/  
 ##### DISCLAIMER : The author of the project is not responsible for the accuracy of the content of the API
 
 
