@@ -4,9 +4,9 @@ import { FontIcon, ImageIcon } from "@fluentui/react/lib/Icon";
 import { Image } from "@fluentui/react/lib/Image"; 
 import { IconButton } from "@fluentui/react/lib/Button"; 
 import { Panel } from "@fluentui/react/lib/Panel"; 
-import { GetFlagUrl } from "../utils/CountryUtils";
 import { useBoolean } from "../hooks/useBoolean";
 import { useSelectedCountry } from "../hooks/useCountries";
+import CountryFlag from "./CountryFlag";
 
 
 const CountryInfoPanel = (): JSX.Element => {
@@ -48,7 +48,7 @@ const CountryInfoPanel = (): JSX.Element => {
             >
                 
                 <Image
-                    src={GetFlagUrl(selectedcountry?.alpha3Code)}
+                    src={selectedcountry?.flag}
                     alt="flag"
                     width={150}
                 />
@@ -76,7 +76,7 @@ const CountryInfoPanel = (): JSX.Element => {
                 {selectedcountry?.languages?.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
-                {selectedcountry?.borders?.map((b,i) => {return <div key={'border-'+i}><ImageIcon className={flagIconClass} imageProps={{src:GetFlagUrl(b),width:46,height:30}}/><span>{b}</span><br/></div>})}<br/>
+                {selectedcountry?.borders?.map((b,i) => {return <CountryFlag code={b} index={i}/> })}<br/>
             </Panel>
 
         </>

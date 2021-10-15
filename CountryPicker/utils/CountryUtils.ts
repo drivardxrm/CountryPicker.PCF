@@ -13,9 +13,6 @@ export const getAllCountries = async ():Promise<Country[]> => {
     
 };
 
-export const GetFlagUrl = (key:string|number|undefined):string => 
-        "https://restcountries.com/data/" + key?.toString().toLowerCase() + ".svg"
-
 export const GetCountryName = (country:Country, language:string):string => {
 
     let name = "";

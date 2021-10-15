@@ -1,6 +1,5 @@
 import * as React from "react";
 import { FontIcon,ImageIcon,mergeStyles } from "@fluentui/react"; 
-import { GetFlagUrl} from "./../utils/CountryUtils"
 import { useSelectedCountry } from "../hooks/useCountries";
 
 
@@ -21,7 +20,7 @@ const FlagIcon = ():JSX.Element => {
 
 
     return selectedcountry !== undefined  ?
-        <ImageIcon className={flagiconclass} imageProps={{src:GetFlagUrl(selectedcountry.alpha3Code), height:"100%", width:"100%"}}/> :
+        <ImageIcon className={flagiconclass} imageProps={{src:selectedcountry.flag, height:"100%", width:"100%"}}/> :
         <FontIcon iconName="Globe" className={flagiconclass} />
 }
 export default FlagIcon;
