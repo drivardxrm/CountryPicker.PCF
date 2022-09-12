@@ -1,4 +1,5 @@
 {
+  "homepage": "http://drivardxrm.github.io/CountryPicker.PCF",
   "name": "pcf-project",
   "version": "1.0.0",
   "description": "Project containing your PowerApps Component Framework (PCF) control.",
@@ -8,7 +9,8 @@
     "rebuild": "pcf-scripts rebuild",
     "start": "pcf-scripts start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "gh-pages -d storybook-static"
   },
   "dependencies": {
     "@fluentui/react": "^8.82.1",
@@ -33,6 +35,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "babel-loader": "^8.2.5",
+    "gh-pages": "^4.0.0",
     "pcf-scripts": "^1.16.6",
     "pcf-start": "^1.16.6",
     "typescript": "^4.4.3"
