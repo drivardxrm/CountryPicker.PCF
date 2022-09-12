@@ -1,6 +1,6 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createElement } from 'react';
+import { createRoot, Root } from 'react-dom/client';
 
 import CountryPickerApp from "./components/CountryPickerApp";
 import IViewModel from "./services/ViewModel";
@@ -8,13 +8,11 @@ import IViewModel from "./services/ViewModel";
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
-	
+	private _root: Root;
 	private _selectedCode: string;
 	private _selectedName: string;
 
 	private _notifyOutputChanged:() => void;
-	private _container: HTMLDivElement;
-	
 
 	private _viewmodel: IViewModel = { 
 										//properties
@@ -49,10 +47,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	{
 		// Add control initialization code
 		this._notifyOutputChanged = notifyOutputChanged;
-		this._container = document.createElement("div");
-		
-
-		container.appendChild(this._container);
+		this._root = createRoot(container!)
 
 		
 	}
@@ -96,10 +91,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._viewmodel.masked = isMasked;
 
 		// RENDER React Component
-		ReactDOM.render(
-			React.createElement(CountryPickerApp,this._viewmodel),
-			this._container
-		);
+		this._root.render(createElement(CountryPickerApp, this._viewmodel)) 
+
 	}
 
 	/** 
@@ -121,7 +114,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	public destroy(): void
 	{
 		// Add code to cleanup control if necessary
-		ReactDOM.unmountComponentAtNode(this._container);
+		this._root.unmount();
 	}
 
 	

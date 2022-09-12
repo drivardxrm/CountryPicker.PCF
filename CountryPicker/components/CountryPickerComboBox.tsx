@@ -24,6 +24,7 @@ const CountryPickerComboBox = ():JSX.Element => {
     const { options, isLoading, isError } = useCountryOptions();
     //const { data: options, isLoading, isError } = useCountriesAsOptions();
     const { selectedoption } = useSelectedOption();
+    const firstUpdate = useRef(true);
 
     const prevSelectedOption = usePrevious<IComboBoxOption | undefined>(selectedoption); 
     
@@ -31,11 +32,15 @@ const CountryPickerComboBox = ():JSX.Element => {
     //will trigger callback to PCF, if data is changed outside of PCF
     useEffect(
          ()=>{
-             if(prevSelectedOption !== undefined && selectedoption === undefined){
+            if (firstUpdate.current) { // skip on first update 
+                firstUpdate.current = false;
+                return;
+            }
+            if(prevSelectedOption !== undefined && selectedoption === undefined){
                 vm.onChange("","");
-             }else if(selectedoption !== undefined && selectedoption !== prevSelectedOption){
+            }else if(selectedoption !== undefined && selectedoption.key !== prevSelectedOption?.key){
                 vm.onChange(selectedoption.key.toString(),selectedoption.text);       
-             }
+            }
          }
      ,[selectedoption])
 

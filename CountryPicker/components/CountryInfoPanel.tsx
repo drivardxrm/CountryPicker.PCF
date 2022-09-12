@@ -76,7 +76,7 @@ const CountryInfoPanel = (): JSX.Element => {
                 {selectedcountry?.languages?.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
-                {selectedcountry?.borders?.map((b,i) => {return <CountryFlag code={b} index={i}/> })}<br/>
+                {selectedcountry?.borders?.map((b,i) => {return <CountryFlag code={b} index={i} key={'flag-'+i}/> })}<br/>
             </Panel>
 
         </>

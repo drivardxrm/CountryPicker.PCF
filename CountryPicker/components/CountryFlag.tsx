@@ -25,15 +25,11 @@ const CountryFlag = ({code,index}:CountryFlagProps): JSX.Element => {
     
 
     return(
-        <>                                                               
-            <div key={'border-' + index}>
-                <Stack>
-                    <ImageIcon className={flagIconClass} imageProps={{src:country?.flag ?? '',width:46,height:30}}/>
-                    <span >{code}</span>
-                    <br/>
-                </Stack>
-            </div>
-        </>
+        <Stack>
+            <ImageIcon className={flagIconClass} imageProps={{src:country?.flag ?? '',width:46,height:30}}/>
+            <span >{code}</span>
+            <br/>
+        </Stack>
     );
 
 }
