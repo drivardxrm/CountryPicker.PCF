@@ -1,6 +1,9 @@
 # CountryPicker.PCF ![GitHub all releases](https://img.shields.io/github/downloads/drivardxrm/CountryPicker.PCF/total?style=plastic)
 Country Picker PCF (PowerApps Component framework) Control that turns a PowerApps text field into a Combobox displaying country names and flags.
 
+* 📚[Try Component in Storybook](https://drivardxrm.github.io/CountryPicker.PCF/)
+
+
 * Download latest version here : https://github.com/drivardxrm/CountryPicker.PCF/releases/latest
 
 #### IMPORTANT : DON'T USE VERSION PRIOR TO v1.0.0.9 , THE API ROOT AS CHANGED FOR FETCHING THE COUNTRY DATA 
