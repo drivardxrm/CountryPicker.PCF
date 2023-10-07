@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
+import { useQuery } from '@tanstack/react-query'
 import { Country } from "../models/Country";
 import { getAllCountries, GetCountryName } from "../utils/CountryUtils";
 import { useViewModel } from "../services/ViewModelProvider";

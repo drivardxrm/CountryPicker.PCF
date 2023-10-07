@@ -1,13 +1,13 @@
-import * as React from "react";
-import { useContext } from "react";
+import * as React from "react"
+import { useContext } from "react"
 
-import IViewModel from "./ViewModel";
+import IViewModel from "./ViewModel"
 
 
 interface ViewModelProviderProps {
     viewmodel:IViewModel,
     children: React.ReactNode
-};
+}
 
 export const ViewModelProvider = ({ viewmodel, children }: ViewModelProviderProps) => {
   

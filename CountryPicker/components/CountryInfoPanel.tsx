@@ -7,6 +7,7 @@ import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "../hooks/useBoolean";
 import { useSelectedCountry } from "../hooks/useCountries";
 import CountryFlag from "./CountryFlag";
+import { Currency, Language } from "../models/Country";
 
 
 const CountryInfoPanel = (): JSX.Element => {
@@ -64,19 +65,19 @@ const CountryInfoPanel = (): JSX.Element => {
                 <span>{selectedcountry?.population?.toLocaleString("en")}</span><br/><br/>
     
                 <FontIcon iconName="AllCurrency" className={panelIconClass} /><span className={bold}>Currencies : </span><br/>
-                {selectedcountry?.currencies?.map((c,i) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
+                {selectedcountry?.currencies?.map((c:Currency,i:number) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
     
                 <FontIcon iconName="Phone" className={panelIconClass} /><span className={bold}>Calling codes : </span>
-                {selectedcountry?.callingCodes?.map((c,i) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
+                {selectedcountry?.callingCodes?.map((c:string,i:number) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Clock" className={panelIconClass} /><span className={bold}>Timezones : </span>
-                {selectedcountry?.timezones?.map((t,i) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
+                {selectedcountry?.timezones?.map((t:string,i:number) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Feedback" className={panelIconClass} /><span className={bold}>Languages : </span>
-                {selectedcountry?.languages?.map((l,i) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
+                {selectedcountry?.languages?.map((l:Language,i:number) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
-                {selectedcountry?.borders?.map((b,i) => {return <CountryFlag code={b} index={i} key={'flag-'+i}/> })}<br/>
+                {selectedcountry?.borders?.map((b:string,i:number) => {return <CountryFlag code={b} index={i} key={'flag-'+i}/> })}<br/>
             </Panel>
 
         </>
