@@ -20,7 +20,7 @@ const FlagIcon = ():JSX.Element => {
 
 
     return selectedcountry !== undefined  ?
-        <ImageIcon className={flagiconclass} imageProps={{src:selectedcountry.flag, height:"100%", width:"100%"}}/> :
+        <ImageIcon className={flagiconclass} imageProps={{src:selectedcountry.flags.png, height:"100%", width:"100%"}}/> :
         <FontIcon iconName="Globe" className={flagiconclass} />
 }
 export default FlagIcon;

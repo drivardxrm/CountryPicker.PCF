@@ -26,8 +26,8 @@ const CountryFlag = ({code,index}:CountryFlagProps): JSX.Element => {
 
     return(
         <Stack>
-            <ImageIcon className={flagIconClass} imageProps={{src:country?.flag ?? '',width:46,height:30}}/>
-            <span >{code}</span>
+            <ImageIcon className={flagIconClass} imageProps={{src:country?.flags.png ?? '',width:46,height:30}}/>
+            <span >{country?.name?.common} ({code})</span>
             <br/>
         </Stack>
     );

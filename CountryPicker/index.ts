@@ -9,6 +9,7 @@ import IViewModel from "./services/ViewModel";
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private _root: Root;
+	private _isDesignMode: boolean
 	private _selectedCode: string;
 	private _selectedName: string;
 
@@ -49,7 +50,11 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._notifyOutputChanged = notifyOutputChanged;
 		this._root = createRoot(container!)
 
-		
+		//https://butenko.pro/2023/01/08/pcf-design-time-vs-run-time/
+        if (location.ancestorOrigins[0] === "https://make.powerapps.com" ||
+            location.ancestorOrigins[0] === "https://make.preview.powerapps.com") {
+            this._isDesignMode = true;
+        }
 	}
 
 	private notifyChange(selectedCode: string, selectedName:string) {
@@ -81,12 +86,14 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
 		//Prepare ViewModel
-		this._viewmodel.countrycode = this._selectedCode;
-		this._viewmodel.language = context.parameters.language.raw || "en";
-		this._viewmodel.promoted = context.parameters.promoted.raw?.split(',') || undefined;
-		this._viewmodel.displayinfo = context.parameters.displayinfo.raw === "true"
+		this._viewmodel.countrycode = this._isDesignMode ? 
+												"CAN" : 				   // Design mode 
+												this._selectedCode;    // Run mode
+		this._viewmodel.language = context.parameters.language?.raw || "en";
+		this._viewmodel.promoted = context.parameters.promoted?.raw?.split(',') || undefined;
+		this._viewmodel.displayinfo = context.parameters.displayinfo?.raw === "true"
 		//harness will put 'val' by default so I want to treat this value as null
-		this._viewmodel.limit = context.parameters.limit.raw == "val" ? undefined : context.parameters.limit.raw?.split(',') || undefined;
+		this._viewmodel.limit = context.parameters.limit?.raw == "val" ? undefined : context.parameters.limit?.raw?.split(',') || undefined;
 		this._viewmodel.readonly = isReadOnly;
 		this._viewmodel.masked = isMasked;
 

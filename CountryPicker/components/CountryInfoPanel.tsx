@@ -7,7 +7,6 @@ import { Panel } from "@fluentui/react/lib/Panel";
 import { useBoolean } from "../hooks/useBoolean";
 import { useSelectedCountry } from "../hooks/useCountries";
 import CountryFlag from "./CountryFlag";
-import { Currency, Language } from "../models/Country";
 
 
 const CountryInfoPanel = (): JSX.Element => {
@@ -40,7 +39,7 @@ const CountryInfoPanel = (): JSX.Element => {
 
             <Panel
                 isLightDismiss
-                headerText={selectedcountry?.name + " (" + selectedcountry?.alpha3Code + ")"}
+                headerText={selectedcountry?.name.common + " (" + selectedcountry?.cca3 + ")"}
                 headerClassName={bold}
                 isOpen={isOpen}
                 onDismiss={dismissPanel}
@@ -49,7 +48,7 @@ const CountryInfoPanel = (): JSX.Element => {
             >
                 
                 <Image
-                    src={selectedcountry?.flag}
+                    src={selectedcountry?.flags?.png}
                     alt="flag"
                     width={150}
                 />
@@ -59,22 +58,24 @@ const CountryInfoPanel = (): JSX.Element => {
                 <span>{selectedcountry?.region}/{selectedcountry?.subregion}</span><br/><br/>
     
                 <FontIcon iconName="GlobeFavorite" className={panelIconClass} /><span className={bold}>Capital :</span><br/>
-                <span>{selectedcountry?.capital}</span><br/><br/>
+                <span>{selectedcountry?.capital?.join()}</span><br/><br/>
     
                 <FontIcon iconName="Family" className={panelIconClass} /><span className={bold}>Population : </span><br/>
                 <span>{selectedcountry?.population?.toLocaleString("en")}</span><br/><br/>
     
                 <FontIcon iconName="AllCurrency" className={panelIconClass} /><span className={bold}>Currencies : </span><br/>
-                {selectedcountry?.currencies?.map((c:Currency,i:number) => {return <div key={'currency-'+i}><span>{c.name} ({c.symbol}) </span><br/></div>})}<br/>
-    
-                <FontIcon iconName="Phone" className={panelIconClass} /><span className={bold}>Calling codes : </span>
-                {selectedcountry?.callingCodes?.map((c:string,i:number) => {return <div key={'code-'+i}><span>{c}</span><br/></div>})}<br/>
-                
+                {selectedcountry && Object.entries(selectedcountry.currencies).map(([k, v]) => {
+                    return <div key={'currency-'+k}><span>{v.name} ({v.symbol}) </span><br/></div>
+                })}<br/>
+                                
                 <FontIcon iconName="Clock" className={panelIconClass} /><span className={bold}>Timezones : </span>
                 {selectedcountry?.timezones?.map((t:string,i:number) => {return <div key={'tz-'+i}><span>{t}</span><br/></div>})}<br/>
                 
                 <FontIcon iconName="Feedback" className={panelIconClass} /><span className={bold}>Languages : </span>
-                {selectedcountry?.languages?.map((l:Language,i:number) => {return <div key={'lang-'+i}><span>{l.name}</span><br/></div>})}<br/>
+                {selectedcountry && Object.entries(selectedcountry.languages).map(([k, v]) => {
+                     return <div key={'lang-'+k}><span>{v}</span><br/></div>
+                })}<br/>
+
                 
                 <FontIcon iconName="Nav2DMapView" className={panelIconClass} /><span className={bold}>Borders : </span>
                 {selectedcountry?.borders?.map((b:string,i:number) => {return <CountryFlag code={b} index={i} key={'flag-'+i}/> })}<br/>

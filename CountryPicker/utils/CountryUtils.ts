@@ -7,7 +7,7 @@ export const getAllCountries = async ():Promise<Country[]> => {
     //console.log("--fetching all countries--");
   
     //If country list is limited, Fetch only the needed countries
-    const { data } = await axios.get<Country[]>("https://restcountries.com/v2/all");
+    const { data } = await axios.get<Country[]>("https://restcountries.com/v3.1/all?fields=name,flags,cca3,capital,region,subregion,translations,population,timezones,currencies,borders,languages");
   
     return data;
     
@@ -18,38 +18,38 @@ export const GetCountryName = (country:Country, language:string):string => {
     let name = "";
     switch (language){
         case "en":
-             name = country.name;  
+             name = country.name.common;  
              break;        
         case "de":
-            name = country.translations.de ?? country.name;
+            name = country.translations.deu?.common ?? country.name.common;
             break;
         case "es":
-            name = country.translations.es ?? country.name;
+            name = country.translations.spa?.common ?? country.name.common;
             break;
         case "fr":
-            name = country.translations.fr ?? country.name;
+            name = country.translations.fra?.common ?? country.name.common;
             break;
         case "ja":
-            name = country.translations.ja ?? country.name;
+            name = country.translations.jpn?.common ?? country.name.common;
             break;
         case "it":
-            name = country.translations.it ?? country.name;
+            name = country.translations.ita?.common ?? country.name.common;
             break;
         case "pt":
-            name = country.translations.pt ?? country.name;
+            name = country.translations.por?.common ?? country.name.common;
             break;
         case "nl":
-            name = country.translations.nl ?? country.name;
+            name = country.translations.nld?.common ?? country.name.common;
             break;
         case "fa":
-            name = country.translations.fa ?? country.name;
+            name = country.translations.ara?.common ?? country.name.common;
             break;
         default:
-            name = country.name;
+            name = country.name.common;
     }
     //in case one of the translation is empty, default to country.name
     if(name == ""){
-        name = country.name;
+        name = country.name.common;
     }
     return name;
 }

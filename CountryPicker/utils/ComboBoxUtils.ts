@@ -5,7 +5,7 @@ import { GetCountryName } from "./CountryUtils";
 
 export const asComboboxOptions = (data:Country[],vm:IViewModel) => data.map(c => (
     {
-      key:c.alpha3Code,
+      key:c.cca3,
       text:GetCountryName(c,vm.language)
     }
   ))

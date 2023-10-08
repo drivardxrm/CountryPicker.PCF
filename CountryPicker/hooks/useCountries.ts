@@ -21,7 +21,7 @@ const useFilteredCountries = () => {
 
   const { countries, isLoading, isError } = useAllCountries();
 
-  const filterdcountries = countries?.filter(c => vm.limit === undefined || vm.limit.includes(c.alpha3Code)) //Filter 
+  const filterdcountries = countries?.filter(c => vm.limit === undefined || vm.limit.includes(c.cca3)) //Filter 
 
   return {countries:filterdcountries, isLoading, isError}
 }
@@ -47,7 +47,7 @@ export const useCountry = (code:string) => {
 
   const { countries, isLoading, isError } = useAllCountries();
 
-  const country = countries?.find((country) => country.alpha3Code === code)
+  const country = countries?.find((country) => country.cca3 === code)
 
   return {country,isLoading,isError};
 
@@ -60,7 +60,7 @@ export const useSelectedCountry = () => {
 
   const { countries, isLoading, isError } = useFilteredCountries();
 
-  const selectedcountry = countries?.find((country) => country.alpha3Code === vm.countrycode)
+  const selectedcountry = countries?.find((country) => country.cca3 === vm.countrycode)
 
   return {selectedcountry,isLoading,isError};
 
@@ -76,7 +76,7 @@ export const useSelectedOption = () => {
 
   const selectedoption = selectedcountry ? 
         {
-          key:selectedcountry.alpha3Code,
+          key:selectedcountry.cca3,
           text:GetCountryName(selectedcountry,vm.language)
         } :
         undefined;
