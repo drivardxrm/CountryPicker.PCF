@@ -51,8 +51,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._root = createRoot(container!)
 
 		//https://butenko.pro/2023/01/08/pcf-design-time-vs-run-time/
-        if (location.ancestorOrigins[0] === "https://make.powerapps.com" ||
-            location.ancestorOrigins[0] === "https://make.preview.powerapps.com") {
+        if (location.ancestorOrigins?.[0] === "https://make.powerapps.com" ||
+            location.ancestorOrigins?.[0] === "https://make.preview.powerapps.com") {
             this._isDesignMode = true;
         }
 	}
