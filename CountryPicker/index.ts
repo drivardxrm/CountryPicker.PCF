@@ -11,6 +11,7 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	private _root: Root;
 	private _isDesignMode: boolean
 	private _selectedCode: string;
+	private _selectedCodeIso2: string;
 	private _selectedName: string;
 
 	private _notifyOutputChanged:() => void;
@@ -57,11 +58,12 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
         }
 	}
 
-	private notifyChange(selectedCode: string, selectedName:string) {
+	private notifyChange(selectedCode: string, selectedName:string, selectedCodeIso2:string) {
 
 		
 		this._selectedCode = selectedCode;
 		this._selectedName = selectedName;
+		this._selectedCodeIso2 = selectedCodeIso2;
 		this._notifyOutputChanged();
 
 	}
@@ -110,7 +112,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	{
 		return {
 			countrycode: this._selectedCode,
-			countryname: this._selectedName
+			countryname: this._selectedName,
+			countrycodeiso2: this._selectedCodeIso2
 		};
 	}
 

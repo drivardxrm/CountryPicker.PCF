@@ -3,6 +3,7 @@ import { Country } from "../models/Country";
 import { getAllCountries, GetCountryName } from "../utils/CountryUtils";
 import { useViewModel } from "../services/ViewModelProvider";
 import { asComboboxOptions } from "../utils/ComboBoxUtils";
+import { IComboBoxOption } from '@fluentui/react';
 
 
 // returns all the countries
@@ -74,10 +75,11 @@ export const useSelectedOption = () => {
 
   const { selectedcountry, isLoading, isError } = useSelectedCountry();
 
-  const selectedoption = selectedcountry ? 
+  const selectedoption:IComboBoxOption|undefined = selectedcountry ? 
         {
           key:selectedcountry.cca3,
-          text:GetCountryName(selectedcountry,vm.language)
+          text:GetCountryName(selectedcountry,vm.language),
+          data:{cca2:selectedcountry.cca2}
         } :
         undefined;
   

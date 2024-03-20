@@ -1,9 +1,10 @@
-//Extracted interface from this API : https://restcountries.com/v3.1/all?fields=name,flags,cca3,capital,region,subregion,translations,population,timezones,currencies,borders,idd,languages
+//Extracted interface from this API : https://restcountries.com/v3.1/all?fields=name,flags,cca3,cca2,capital,region,subregion,translations,population,timezones,currencies,borders,idd,languages
 
 export interface Country {
     flags: Flags;
     name: Name;
     cca3: string;
+    cca2: string;
     currencies: Record<string, Currency>;
     idd: Idd;
     region: string;

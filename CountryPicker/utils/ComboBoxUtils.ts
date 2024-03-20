@@ -6,7 +6,8 @@ import { GetCountryName } from "./CountryUtils";
 export const asComboboxOptions = (data:Country[],vm:IViewModel) => data.map(c => (
     {
       key:c.cca3,
-      text:GetCountryName(c,vm.language)
+      text:GetCountryName(c,vm.language),
+      data:{cca2:c.cca2}
     }
   ))
   .sort(sortByOptionText)                                    //sort by key

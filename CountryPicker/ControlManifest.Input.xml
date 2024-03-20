@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="DR" constructor="CountryPicker" version="1.1.22" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard" preview-image="img/CountryPicker.png">
+  <control namespace="DR" constructor="CountryPicker" version="1.1.23" display-name-key="CountryPicker" description-key="CountryPicker control" control-type="standard" preview-image="img/CountryPicker.png">
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="countrycode" display-name-key="CountryCode" description-key="REQUIRED: Bound Country field (represents ISO 3166-1 3-letter country code)" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="countryname" display-name-key="CountryName" description-key="OPTIONAL: Bound field to store Country name in the chosen language (default : English)" of-type="SingleLine.Text" usage="bound" />
@@ -24,6 +24,7 @@
       <value name="true" display-name-key="true" description-key="True" default="true">true</value>
       <value name="false" display-name-key="false" description-key="False">false</value>
     </property>
+    <property name="countrycodeiso2" display-name-key="CountryCodeISO2" description-key="OPTIONAL: Bound field to store the 2 character Country Code ISO2" of-type="SingleLine.Text" usage="bound" />
 
     <resources>
       <code path="index.ts" order="1"/>

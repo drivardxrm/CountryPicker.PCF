@@ -6,7 +6,7 @@ import CountryPickerComboBoxOption from "./CountryPickerOption"
 import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
 import FlagIcon from "./FlagIcon"
-import { useCountryOptions, useSelectedOption } from "../hooks/useCountries";
+import { useCountryOptions, useSelectedCountry, useSelectedOption } from "../hooks/useCountries";
 import { useViewModel } from "../services/ViewModelProvider";
 import { useEffect, useRef } from "react";
 import { usePrevious } from "../hooks/usePrevious";
@@ -37,9 +37,9 @@ const CountryPickerComboBox = ():JSX.Element => {
                 return;
             }
             if(prevSelectedOption !== undefined && selectedoption === undefined){
-                vm.onChange("","");
+                vm.onChange("","","");
             }else if(selectedoption !== undefined && selectedoption.key !== prevSelectedOption?.key){
-                vm.onChange(selectedoption.key.toString(),selectedoption.text);       
+                vm.onChange(selectedoption.key.toString(),selectedoption.text,selectedoption.data?.cca2!);       
             }
          }
      ,[selectedoption])
@@ -47,7 +47,7 @@ const CountryPickerComboBox = ():JSX.Element => {
     //EVENTS
     //- When value of combobox changes, callback to PCF
     const onComboboxChanged = (event: React.FormEvent<IComboBox>,option?:IComboBoxOption|undefined,index? : number | undefined) => {
-        vm.onChange(option?.key.toString()!,option?.text!);       
+        vm.onChange(option?.key.toString()!,option?.text!,option?.data?.cca2);       
     } 
 
     //MAIN RENDERING

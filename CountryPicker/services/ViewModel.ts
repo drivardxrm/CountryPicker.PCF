@@ -10,7 +10,7 @@ interface IViewModel{
   masked: boolean;
 
   //callback function to PCF
-  onChange: (countrycode:string,countryname:string) => void;
+  onChange: (countrycode:string,countryname:string,countrycodeiso2:string) => void;
 
 }
 
