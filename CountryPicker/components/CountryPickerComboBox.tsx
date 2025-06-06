@@ -3,7 +3,6 @@ import { Stack } from "@fluentui/react/lib/Stack";
 import { VirtualizedComboBox, IComboBoxOption,IComboBox } from "@fluentui/react/lib/ComboBox"; 
 
 import CountryPickerComboBoxOption from "./CountryPickerOption"
-import CountryInfoPanel from "./CountryInfoPanel"
 import MasquedInput from "./MaskedInput"
 import FlagIcon from "./FlagIcon"
 import { useCountryOptions, useSelectedCountry, useSelectedOption } from "../hooks/useCountries";
@@ -78,11 +77,6 @@ const CountryPickerComboBox = ():JSX.Element => {
                             disabled={vm.readonly}
                             
                         />
-                        {vm.displayinfo &&(
-                            <CountryInfoPanel />
-                        )}
-                        
-    
                     </Stack>      
                 )}
             </>
