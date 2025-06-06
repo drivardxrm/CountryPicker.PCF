@@ -3,8 +3,10 @@
     "compilerOptions": {
         "typeRoots": ["node_modules/@types"],
         "module": "es2015",
-        "moduleResolution": "node",
+        "moduleResolution": "node", 
         "jsx": "react",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
         // "sourceMap": true
     }
 }
