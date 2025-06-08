@@ -6,7 +6,16 @@ Country Picker PCF (PowerApps Component framework) Control that turns a PowerApp
 
 * Download latest version here : https://github.com/drivardxrm/CountryPicker.PCF/releases/latest
 
-#### IMPORTANT : DON'T USE VERSION PRIOR TO v1.0.0.9 , THE API ROOT AS CHANGED FOR FETCHING THE COUNTRY DATA 
+#### IMPORTANT : AS OF v3.0.0.3 - Dependency on restcountries API was removed
+🔄 Removed dependency on the RestCountries API
+The external API introduced a breaking change, so the control no longer relies on it.
+
+📁 Switched to a local static JSON file for country data
+Country names and codes are now loaded from a bundled file. This improves reliability and ensures the control works consistently.
+
+❌ Removed country info feature
+Since the local file only contains basic country data, the additional country information feature (e.g., population, region) has been removed. It was useful for demos but didn't add much practical value in real use cases.
+
 
 #### Features:
 
