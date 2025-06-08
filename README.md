@@ -45,7 +45,7 @@ axios: https://axios-http.com/
 | Language    | Base language for country names. Available languages (English, German, Spanish, French, Japanese, Italian, Portuguese, Dutch, Persian)                                                    | en |
 | Promoted   | Promoted countries (Will appear first) *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX') |   |
 | Limit    | Limit to these countries *Use comma separated list of ISO 3166-1 3-letter country code* (Ex. 'USA,CAN,MEX'). Leave blank to include all countries|      |
-| DisplayInfo   | Display Info Panel   | true        |
+| DisplayInfo   | (DEPRECATED) Display Info Panel  - NOT WORKING ANYMORE  | true        |
 | CountryCodeIso2  | OPTIONAL OUTPUT: Bound field to store the 2 character Country Code ISO2                          |             |
 
 
