@@ -1,13 +1,11 @@
 
-import axios from "axios";
 import { Country } from "../models/Country";
 import countriesData from '../countries_data.json';
 
 /// 2025-06-05 THERE is now a 10 fields limit on the API
 export const getAllCountries = async ():Promise<Country[]> => {
     
-    //console.log("--fetching all countries--");
-     // Cast the imported JSON to Country[]
+    //json data file was generated from : https://restcountries.com/v3.1/all?fields=name,flags,cca3,cca2,translations
     return countriesData as Country[];
   
 };
