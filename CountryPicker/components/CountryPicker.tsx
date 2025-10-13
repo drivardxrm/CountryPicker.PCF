@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { useFilteredCountries } from "../hooks/useCountries";
+//import { useFilteredCountries } from "../hooks/useCountries";
 import { useViewModel } from "../services/ViewModelProvider";
 import { ChangeEvent, MouseEventHandler, useEffect, useMemo,  useState } from "react";
 import { Button, Image,  Input,  mergeClasses, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from "@fluentui/react-components";
 import { ChevronDown20Regular, DismissRegular } from '@fluentui/react-icons';
 import { useStyles } from "../styles/styles";
-import { GetCountryName, sortByCountryName, sortByPromoted } from "../utils/CountryUtils";
+import { GetCountryName, getCountryPickerOptions, sortByCountryName, sortByPromoted } from "../utils/CountryUtils";
 
 
 
@@ -18,7 +18,8 @@ const CountryPicker = ():JSX.Element => {
     const styles = useStyles()
     
   
-    const { countries, status, error, isFetching } = useFilteredCountries();
+    //const { countries, status, error, isFetching } = useFilteredCountries();
+    const countries = getCountryPickerOptions(vm.language, vm.limit, vm.promoted);
     const [selectedOption, setSelectedOption] = useState<
         string | undefined
     >(vm.countrycode ?? undefined);
@@ -31,8 +32,7 @@ const CountryPicker = ():JSX.Element => {
     // if value is changed outside of PCF
     useEffect(
         () => {
-        if (status === 'success' &&
-                vm.countrycode !== selectedOption) {
+        if (vm.countrycode !== selectedOption) {
             setSelectedOption(vm.countrycode)
         }
     }
@@ -41,9 +41,9 @@ const CountryPicker = ():JSX.Element => {
     // Signal back to Form 
     useEffect(
         () => {
-        if (status === 'success' && selectedOption === undefined) {
+        if (selectedOption === undefined) {
             vm.onChange("","","")
-        }else if(status === 'success' && selectedOption !== vm.countrycode){
+        }else if(selectedOption !== vm.countrycode){
             let country = countries.find((option) => option.cca3 === selectedOption)
             vm.onChange(country?.cca3!,GetCountryName(country!, vm.language),country?.cca2!)
         }
@@ -133,11 +133,7 @@ const CountryPicker = ():JSX.Element => {
     });
 
     //MAIN RENDERING
-    if(status === 'pending' || isFetching){
-        return <Spinner size='tiny' appearance='primary' label={'Loading...'} />
-    }if(status === 'error'){
-        return <div>Error fetching data...{error?.message}</div>
-    }if(vm.masked){ 
+    if(vm.masked){ 
         return (
             <div className={styles.tagpicker}>
                 <Input 

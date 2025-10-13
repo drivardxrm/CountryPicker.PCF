@@ -9,6 +9,21 @@ export const getAllCountries = async ():Promise<Country[]> => {
   
 };
 
+export const getCountryPickerOptions = (
+    language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa",
+    filter:string[]|undefined,
+    promoted:string[] | undefined):Country[] => {
+    
+    //json data file was generated from : https://restcountries.com/v3.1/all?fields=name,flags,cca3,cca2,translations
+    let countries = [...countriesData] as Country[];
+    
+    return countries
+                .filter(c => filter === undefined || filter.includes(c.cca3)) //Filter 
+                .sort(sortByCountryName(language)) //Sort by name
+                .sort(sortByPromoted(promoted)); //Sort by promoted list
+  
+};
+
 
 //Sort functions for countries
 export function sortByCountryName(language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa") {
