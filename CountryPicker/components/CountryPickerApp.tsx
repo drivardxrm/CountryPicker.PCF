@@ -1,14 +1,15 @@
-import { initializeIcons } from "@fluentui/react/lib/Icons";
+
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import IViewModel from "../services/ViewModel";
 import {ViewModelProvider} from "../services/ViewModelProvider";
 
 
-import CountryPickerComboBox from "./CountryPickerComboBox";
+
 import { FluentProvider, IdPrefixProvider, webDarkTheme, webLightTheme } from "@fluentui/react-components";
-//initilize icons
-initializeIcons();
+import CountryPicker from "./CountryPicker";
+
+
 
 //declare outside of FC element so it doesnt gets evaluated at each rerenders
 const queryClient = new QueryClient({
@@ -28,9 +29,9 @@ const CountryPickerApp = (props:IViewModel): JSX.Element =>
   return (
     <QueryClientProvider client={queryClient}>
       <ViewModelProvider viewmodel={props}>
-        <IdPrefixProvider value={`countrypicker-${props.instanceid}-`}>
+        <IdPrefixProvider value={`countrypicker-${props.instanceid}`}>
           <FluentProvider theme={props.isDarkMode ? webDarkTheme : webLightTheme}>
-            <CountryPickerComboBox></CountryPickerComboBox>
+            <CountryPicker/>
           </FluentProvider>
         </IdPrefixProvider>
         

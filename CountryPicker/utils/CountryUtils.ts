@@ -10,6 +10,41 @@ export const getAllCountries = async ():Promise<Country[]> => {
   
 };
 
+
+//Sort functions for countries
+export function sortByCountryName(language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa") {
+    return function (a:Country,b:Country):number {
+
+        let nameA = GetCountryName(a,language);
+        let nameB = GetCountryName(b,language);
+
+        if (nameA > nameB) return 1;
+        if (nameB > nameA) return -1;
+  
+        return 0;
+    };
+}
+  
+// Bubble up 'promoted' keys list to be on top. 
+export function sortByPromoted(promoted:string[] | undefined) {
+    return function (a:Country,b:Country):number {
+
+        const last = promoted?.length ?? 0;
+        const keya = a.cca3.toString();
+        const keyb = b.cca3.toString();
+
+        const ranka = promoted?.includes(keya) ? promoted.indexOf(keya) : last;
+        const rankb = promoted?.includes(keyb) ? promoted.indexOf(keyb) : last;
+            
+        if (ranka > rankb) return 1;
+        if (rankb > ranka) return -1;
+        
+        return 0;
+    };
+}
+
+
+
 export const GetCountryName = (country:Country, language:string):string => {
 
     let name = "";
