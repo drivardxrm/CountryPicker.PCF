@@ -6,6 +6,7 @@ import {ViewModelProvider} from "../services/ViewModelProvider";
 
 
 import CountryPickerComboBox from "./CountryPickerComboBox";
+import { FluentProvider, IdPrefixProvider, webDarkTheme, webLightTheme } from "@fluentui/react-components";
 //initilize icons
 initializeIcons();
 
@@ -21,13 +22,18 @@ const queryClient = new QueryClient({
   },
 });
 
-const CountryPickerApp = (viewmodel:IViewModel): JSX.Element => 
+const CountryPickerApp = (props:IViewModel): JSX.Element => 
 {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ViewModelProvider viewmodel={viewmodel}>
-        <CountryPickerComboBox></CountryPickerComboBox>
+      <ViewModelProvider viewmodel={props}>
+        <IdPrefixProvider value={`countrypicker-${props.instanceid}-`}>
+          <FluentProvider theme={props.isDarkMode ? webDarkTheme : webLightTheme}>
+            <CountryPickerComboBox></CountryPickerComboBox>
+          </FluentProvider>
+        </IdPrefixProvider>
+        
       </ViewModelProvider>    
     </QueryClientProvider>
   );

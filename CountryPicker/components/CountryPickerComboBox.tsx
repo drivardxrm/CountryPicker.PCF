@@ -20,7 +20,7 @@ const CountryPickerComboBox = ():JSX.Element => {
     const vm = useViewModel();
     
     //Custom Hook based on react-query and axios
-    const { options, isLoading, isError } = useCountryOptions();
+    const { options, status, error, isFetching } = useCountryOptions();
     //const { data: options, isLoading, isError } = useCountriesAsOptions();
     const { selectedoption } = useSelectedOption();
     const firstUpdate = useRef(true);
@@ -50,9 +50,9 @@ const CountryPickerComboBox = ():JSX.Element => {
     } 
 
     //MAIN RENDERING
-    if(isLoading){
+    if(status === 'pending' || isFetching){
         return <div>Loading...</div>
-    }if(isError){
+    }if(status === 'error'){
         return <div>Error fetching data...</div>
     }if(vm.masked){ 
         return <MasquedInput/>

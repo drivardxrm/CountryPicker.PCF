@@ -1,6 +1,9 @@
 interface IViewModel{ 
   
+
   //view props
+  instanceid: string;
+  isDarkMode: boolean;
   countrycode: string;
   language: "en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa";
   promoted: string[]|undefined;

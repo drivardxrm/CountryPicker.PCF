@@ -8,11 +8,19 @@ import { IComboBoxOption } from '@fluentui/react';
 
 // returns all the countries
 const useAllCountries = () => {
-  
-  const { data, isLoading, isError } = useQuery<Country[],Error>(["countries"],
-            () => getAllCountries());
+  const vm = useViewModel(); 
 
-  return {countries:data, isLoading, isError}
+  const { data, status, error, isFetching } = 
+    useQuery<Country[], Error>(
+        {
+          queryKey: ["countries", vm.instanceid],
+          queryFn: () => getAllCountries(),
+          staleTime: Infinity
+        }
+      )
+    
+
+  return {countries:data, status, error, isFetching}
 }
 
 // returns the filtered countries based in view model
@@ -20,11 +28,11 @@ const useFilteredCountries = () => {
   
   const vm = useViewModel(); 
 
-  const { countries, isLoading, isError } = useAllCountries();
+  const { countries, status, error, isFetching } = useAllCountries();
 
   const filterdcountries = countries?.filter(c => vm.limit === undefined || vm.limit.includes(c.cca3)) //Filter 
 
-  return {countries:filterdcountries, isLoading, isError}
+  return {countries:filterdcountries, status, error, isFetching}
 }
 
 
@@ -34,11 +42,11 @@ const useFilteredCountries = () => {
 export const useCountryOptions = () => {
   const vm = useViewModel(); 
 
-  const { countries, isLoading, isError } = useFilteredCountries();
+  const { countries, status, error, isFetching } = useFilteredCountries();
 
   const options = countries ? asComboboxOptions(countries,vm) : undefined;
 
-  return {options,isLoading,isError};
+  return {options,status, error, isFetching};
 
 }
 
@@ -46,11 +54,11 @@ export const useCountry = (code:string) => {
 
   const vm = useViewModel();
 
-  const { countries, isLoading, isError } = useAllCountries();
+  const { countries, status, error, isFetching } = useAllCountries();
 
   const country = countries?.find((country) => country.cca3 === code)
 
-  return {country,isLoading,isError};
+  return {country,status, error, isFetching};
 
 }
 
@@ -59,11 +67,11 @@ export const useSelectedCountry = () => {
 
   const vm = useViewModel();
 
-  const { countries, isLoading, isError } = useFilteredCountries();
+  const { countries, status, error, isFetching } = useFilteredCountries();
 
   const selectedcountry = countries?.find((country) => country.cca3 === vm.countrycode)
 
-  return {selectedcountry,isLoading,isError};
+  return {selectedcountry,status, error, isFetching};
 
 
 }
@@ -73,7 +81,7 @@ export const useSelectedOption = () => {
 
   const vm = useViewModel();
 
-  const { selectedcountry, isLoading, isError } = useSelectedCountry();
+  const { selectedcountry, status, error, isFetching } = useSelectedCountry();
 
   const selectedoption:IComboBoxOption|undefined = selectedcountry ? 
         {
@@ -84,7 +92,7 @@ export const useSelectedOption = () => {
         undefined;
   
 
-  return {selectedoption,isLoading,isError};
+  return {selectedoption,status, error, isFetching};
 
 }
 

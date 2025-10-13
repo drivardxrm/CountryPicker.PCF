@@ -4,6 +4,7 @@ import { createRoot, Root } from 'react-dom/client';
 
 import CountryPickerApp from "./components/CountryPickerApp";
 import IViewModel from "./services/ViewModel";
+import { v4 as uuidv4 } from 'uuid';
 
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -18,6 +19,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 
 	private _viewmodel: IViewModel = { 
 										//properties
+										instanceid: uuidv4(),
+										isDarkMode: false,
 										countrycode: "",
 										language:"en", 
 										promoted:undefined,
@@ -51,11 +54,9 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._notifyOutputChanged = notifyOutputChanged;
 		this._root = createRoot(container!)
 
-		//https://butenko.pro/2023/01/08/pcf-design-time-vs-run-time/
-        if (location.ancestorOrigins?.[0] === "https://make.powerapps.com" ||
-            location.ancestorOrigins?.[0] === "https://make.preview.powerapps.com") {
-            this._isDesignMode = true;
-        }
+		if ((context.mode as any).isAuthoringMode === true) {
+			this._isDesignMode = true;
+		}
 	}
 
 	private notifyChange(selectedCode: string, selectedName:string, selectedCodeIso2:string) {
