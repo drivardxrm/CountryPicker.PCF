@@ -15,3 +15,4 @@
 # msbuild output directories
 /bin
 /obj
+*storybook.log

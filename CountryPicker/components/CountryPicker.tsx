@@ -11,7 +11,7 @@ import { GetCountryName, getCountryPickerOptions, sortByCountryName, sortByPromo
 
 
 
-const CountryPicker = ():JSX.Element => {
+const CountryPicker = ():React.JSX.Element => {
 
     const vm = useViewModel();
 
