@@ -57,6 +57,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		if ((context.mode as any).isAuthoringMode === true) {
 			this._isDesignMode = true;
 		}
+
+		
 	}
 
 	private notifyChange(selectedCode: string, selectedName:string, selectedCodeIso2:string) {
@@ -76,6 +78,8 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{	
+		this._viewmodel.isDarkMode = context.fluentDesignLanguage?.isDarkTheme ?? false;
+		
 		// If the bound attribute is disabled because it is inactive or the user doesn't have access
 		let isReadOnly = context.mode.isControlDisabled;
 

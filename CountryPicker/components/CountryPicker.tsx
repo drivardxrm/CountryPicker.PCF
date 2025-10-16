@@ -1,9 +1,7 @@
 import * as React from "react";
-
-//import { useFilteredCountries } from "../hooks/useCountries";
 import { useViewModel } from "../services/ViewModelProvider";
 import { ChangeEvent, MouseEventHandler, useEffect, useMemo,  useState } from "react";
-import { Button, Image,  Input,  mergeClasses, Spinner, Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from "@fluentui/react-components";
+import { Button, Image,  Input,  mergeClasses,  Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from "@fluentui/react-components";
 import { ChevronDown20Regular, DismissRegular } from '@fluentui/react-icons';
 import { useStyles } from "../styles/styles";
 import { GetCountryName, getCountryPickerOptions, sortByCountryName, sortByPromoted } from "../utils/CountryUtils";
@@ -27,6 +25,7 @@ const CountryPicker = ():React.JSX.Element => {
     const [isFocused, setIsFocused] = useState(false);
     const [isInputFocused, setInputFocused] = useState(false);
     const [isDisabled, setIsDisabled] = useState(vm.readonly)
+    const [isMasked, setIsMasked] = useState(vm.masked)
     
 
     // if value is changed outside of PCF
@@ -36,7 +35,21 @@ const CountryPicker = ():React.JSX.Element => {
             setSelectedOption(vm.countrycode)
         }
     }
-    , [status, vm.countrycode]);
+    , [vm.countrycode]);
+
+     useEffect(
+        () => {
+        setIsDisabled(vm.readonly)
+        }
+        , [vm.readonly]
+    )
+
+    useEffect(
+        () => {
+        setIsMasked(vm.masked)
+        }
+        , [vm.masked]
+    )
 
     // Signal back to Form 
     useEffect(
@@ -48,7 +61,8 @@ const CountryPicker = ():React.JSX.Element => {
             vm.onChange(country?.cca3!,GetCountryName(country!, vm.language),country?.cca2!)
         }
         }
-        , [selectedOption])
+        , [selectedOption]
+    )
 
     const selectedOptions = useMemo(
         () => (selectedOption ? [selectedOption] : []),
@@ -133,7 +147,7 @@ const CountryPicker = ():React.JSX.Element => {
     });
 
     //MAIN RENDERING
-    if(vm.masked){ 
+    if(isMasked){ 
         return (
             <div className={styles.tagpicker}>
                 <Input 
