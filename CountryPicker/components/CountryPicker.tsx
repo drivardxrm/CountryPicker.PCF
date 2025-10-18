@@ -1,10 +1,12 @@
 import * as React from "react";
 import { useViewModel } from "../services/ViewModelProvider";
 import { ChangeEvent, MouseEventHandler, useEffect, useMemo,  useState } from "react";
-import { Button, Image,  Input,  mergeClasses,  Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from "@fluentui/react-components";
-import { ChevronDown20Regular, DismissRegular } from '@fluentui/react-icons';
+import { Button, Image,  Input,  mergeClasses,  Spinner,  Tag, TagPicker, TagPickerControl, TagPickerGroup, TagPickerInput, TagPickerList, TagPickerOption, TagPickerProps, useTagPickerFilter } from "@fluentui/react-components";
+import { ChevronDown20Regular, DismissRegular, GlobeRegular } from '@fluentui/react-icons';
 import { useStyles } from "../styles/styles";
-import { GetCountryName, getCountryPickerOptions, sortByCountryName, sortByPromoted } from "../utils/CountryUtils";
+import { GetCountryName, sortByCountryName, sortByPromoted } from "../utils/CountryUtils";
+import { useFilteredCountries } from "../hooks/useCountries";
+
 
 
 
@@ -17,7 +19,7 @@ const CountryPicker = ():React.JSX.Element => {
     
   
     //const { countries, status, error, isFetching } = useFilteredCountries();
-    const countries = getCountryPickerOptions(vm.language, vm.limit, vm.promoted);
+    const {countries,status, error, isFetching}  = useFilteredCountries()
     const [selectedOption, setSelectedOption] = useState<
         string | undefined
     >(vm.countrycode ?? undefined);
@@ -56,7 +58,7 @@ const CountryPicker = ():React.JSX.Element => {
         () => {
         if (selectedOption === undefined) {
             vm.onChange("","","")
-        }else if(selectedOption !== vm.countrycode){
+        }else if(countries && selectedOption !== vm.countrycode){
             let country = countries.find((option) => option.cca3 === selectedOption)
             vm.onChange(country?.cca3!,GetCountryName(country!, vm.language),country?.cca2!)
         }
@@ -101,16 +103,13 @@ const CountryPicker = ():React.JSX.Element => {
     };
 
     const placeholder = useMemo(
-        () => selectedOption === undefined ? '---' : '',
+        () => selectedOption === undefined || '' ? '---' : '',
         [selectedOption]
     );
 
     const children = useTagPickerFilter({
         query,
-        options: countries
-            .sort(sortByCountryName(vm.language))
-            .sort(sortByPromoted(vm.promoted))
-            .map((option) => option.cca3),
+        options: countries?.sort(sortByCountryName(vm.language)).sort(sortByPromoted(vm.promoted)).map((option) => option.cca3) ?? [],
         noOptionsElement: (
         <TagPickerOption value="no-matches">
             {'**no match**'}
@@ -126,28 +125,32 @@ const CountryPicker = ():React.JSX.Element => {
                     
                     <Image
                         className={styles.tagPickerOption}
-                        alt={GetCountryName(countries.find((option) => option.cca3 === optionidToRender)!, vm.language)}
-                        key={countries.find((option) => option.cca3 === optionidToRender)?.cca3}
+                        alt={GetCountryName(countries?.find((option) => option.cca3 === optionidToRender), vm.language)}
+                        key={countries?.find((option) => option.cca3 === optionidToRender)?.cca3}
                         shape="square"
-                        src={countries.find((option) => option.cca3 === optionidToRender)?.flags.png}
+                        src={countries?.find((option) => option.cca3 === optionidToRender)?.flags.png}
                         //height={24}
                         width={30}
                     />
                 }
-                text={GetCountryName(countries.find((option) => option.cca3 === optionidToRender)!, vm.language) ?? ''}
+                text={GetCountryName(countries?.find((option) => option.cca3 === optionidToRender), vm.language)}
                 value={optionidToRender}
                 key={optionidToRender}
             >
-                {GetCountryName(countries.find((option) => option.cca3 === optionidToRender)!, vm.language) ?? ''}
+                {GetCountryName(countries?.find((option) => option.cca3 === optionidToRender), vm.language) ?? ''}
             </TagPickerOption>
         ),
 
         filter: (option) =>
-        (GetCountryName(countries.find((o) => o.cca3 === option)!, vm.language).toLowerCase().includes(query.toLowerCase()) ?? false)
+        (GetCountryName(countries?.find((o) => o.cca3 === option), vm.language).toLowerCase().includes(query.toLowerCase()) ?? false)
     });
 
-    //MAIN RENDERING
-    if(isMasked){ 
+    
+    if (status === 'pending' || isFetching) {
+        return <Spinner size='tiny' appearance='primary' label={'Loading...'} />
+    } else if (status === 'error') {
+        return <div>{'Error fetching data...'}</div>
+    } else if(isMasked){ 
         return (
             <div className={styles.tagpicker}>
                 <Input 
@@ -160,6 +163,7 @@ const CountryPicker = ():React.JSX.Element => {
                 />
             </div>
         )
+    //MAIN RENDERING
     }else
         return (
             <div className={styles.tagpicker}>
@@ -178,7 +182,7 @@ const CountryPicker = ():React.JSX.Element => {
                         }
                         onMouseEnter={()=>{setIsFocused(true)}} 
                         onMouseLeave={()=>{setIsFocused(false)}}
-                        expandIcon={<ChevronDown20Regular className={isFocused ? styles.elementVisible : styles.elementHidden}/>}
+                        expandIcon={isFocused ? <ChevronDown20Regular/> : <GlobeRegular/>}
                         secondaryAction={
                             selectedOption && !vm.readonly && !vm.masked  ?
                             
