@@ -28,7 +28,6 @@
     "@eslint/js": "^9.37.0",
     "@mdx-js/react": "^2.3.0",
     "@storybook/addon-docs": "^9.1.13",
-    "@storybook/blocks": "^8.6.14",
     "@storybook/addon-onboarding": "^9.1.13",
     "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
     "@storybook/react-webpack5": "^9.1.13",
