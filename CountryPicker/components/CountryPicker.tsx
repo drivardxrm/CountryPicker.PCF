@@ -103,7 +103,7 @@ const CountryPicker = ():React.JSX.Element => {
     };
 
     const placeholder = useMemo(
-        () => selectedOption === undefined || '' ? '---' : '',
+        () => selectedOption === undefined || selectedOption === '' ? '---' : '',
         [selectedOption]
     );
 

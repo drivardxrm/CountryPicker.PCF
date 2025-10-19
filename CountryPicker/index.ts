@@ -5,6 +5,7 @@ import { createRoot, Root } from 'react-dom/client';
 import CountryPickerApp from "./components/CountryPickerApp";
 import IViewModel from "./services/ViewModel";
 import { v4 as uuidv4 } from 'uuid';
+import { GetBaseCountryCodeForLanguage } from "./utils/CountryUtils";
 
 
 export class CountryPicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -93,10 +94,11 @@ export class CountryPicker implements ComponentFramework.StandardControl<IInputs
 		this._selectedCode = context.parameters.countrycode.raw || "";
 
 		//Prepare ViewModel
-		this._viewmodel.countrycode = this._isDesignMode ? 
-												"CAN" : 				   // Design mode 
-												this._selectedCode;    // Run mode
 		this._viewmodel.language = context.parameters.language?.raw || "en";
+		this._viewmodel.countrycode = this._isDesignMode ? 
+												GetBaseCountryCodeForLanguage(this._viewmodel.language) : 	// Design mode set base country for display on the form designer
+												this._selectedCode;    // Run mode
+		
 		this._viewmodel.promoted = context.parameters.promoted?.raw?.split(',') || undefined;
 		this._viewmodel.displayinfo = context.parameters.displayinfo?.raw === "true"
 		//harness will put 'val' by default so I want to treat this value as null

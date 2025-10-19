@@ -64,47 +64,83 @@ export function sortByPromoted(promoted:string[] | undefined) {
 
 export const GetCountryName = (country:Country | undefined, language:string):string => {
     if(!country){
-        return "";
+        return ""
     }
-    let name = "";
+    let name = ""
     switch (language){
         case "en":
-             name = country.name.common;  
+             name = country.name.common
              break;        
         case "de":
-            name = country.translations.deu?.common ?? country.name.common;
+            name = country.translations.deu?.common ?? country.name.common
             break;
         case "es":
-            name = country.translations.spa?.common ?? country.name.common;
+            name = country.translations.spa?.common ?? country.name.common
             break;
         case "fr":
-            name = country.translations.fra?.common ?? country.name.common;
+            name = country.translations.fra?.common ?? country.name.common
             break;
         case "ja":
-            name = country.translations.jpn?.common ?? country.name.common;
+            name = country.translations.jpn?.common ?? country.name.common
             break;
         case "it":
-            name = country.translations.ita?.common ?? country.name.common;
+            name = country.translations.ita?.common ?? country.name.common
             break;
         case "pt":
-            name = country.translations.por?.common ?? country.name.common;
+            name = country.translations.por?.common ?? country.name.common
             break;
         case "nl":
-            name = country.translations.nld?.common ?? country.name.common;
+            name = country.translations.nld?.common ?? country.name.common
             break;
         case "fa":
-            name = country.translations.ara?.common ?? country.name.common;
+            name = country.translations.ara?.common ?? country.name.common
             break;
         default:
-            name = country.name.common;
+            name = country.name.common
     }
     //in case one of the translation is empty, default to country.name
     if(name == ""){
-        name = country.name.common;
+        name = country.name.common
     }
     return name;
 }
 
 
-
+export const GetBaseCountryCodeForLanguage = (language:"en" | "de" | "es" | "fr" | "ja" | "it" | "pt" | "nl" | "fa"):string => {
+    
+    let code = "";
+    switch (language){
+        case "en":
+             code = "GBR"
+             break;        
+        case "de":
+            code = "DEU"
+            break;
+        case "es":
+            code = "ESP"
+            break;
+        case "fr":
+            code = "FRA"
+            break;
+        case "ja":
+            code = "JPN"
+            break;
+        case "it":
+            code = "ITA"
+            break;
+        case "pt":
+            code = "PRT"
+            break;
+        case "nl":
+            code = "NLD"
+            break;
+        case "fa":
+            code = "IRN"
+            break;
+        default:
+            code = "CAN"
+    }
+    
+    return code;
+}
 
