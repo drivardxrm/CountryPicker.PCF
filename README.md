@@ -29,13 +29,6 @@ Since the local file only contains basic country data, the additional country in
 ##### DISCLAIMER : The author of the project is not responsible for the accuracy of the content of the API
 
 
-# Dependencies
-FluentUI : https://github.com/microsoft/fluentui
-
-react-query : https://react-query.tanstack.com/
-
-axios: https://axios-http.com/
-
 
 # Parameters
 | Parameter         | Description                                                                                  | Default     |
@@ -52,8 +45,17 @@ axios: https://axios-http.com/
 # Screenshots
 <img width="743" height="214" alt="image" src="https://github.com/user-attachments/assets/a9a88a7b-d993-4e32-b326-f823fa38ce32" />
 
-Languages
+
+**Languages**
+
 <img width="1009" height="316" alt="image" src="https://github.com/user-attachments/assets/7f866736-3a31-43b0-9017-ea5420dbc46c" />
+
+
+
+**Blends perfectly with other fields on the form**
+
+<img width="459" height="203" alt="image" src="https://github.com/user-attachments/assets/a42235b6-f5b4-485b-bb04-bfacb4b1e209" />
+<img width="476" height="231" alt="image" src="https://github.com/user-attachments/assets/23fe592f-7fa4-4483-bc20-1652f4d00c2a" />
 
 
 
