@@ -52,6 +52,10 @@ axios: https://axios-http.com/
 # Screenshots
 <img width="743" height="214" alt="image" src="https://github.com/user-attachments/assets/a9a88a7b-d993-4e32-b326-f823fa38ce32" />
 
+Languages
+<img width="1009" height="316" alt="image" src="https://github.com/user-attachments/assets/7f866736-3a31-43b0-9017-ea5420dbc46c" />
+
+
 
 
 
