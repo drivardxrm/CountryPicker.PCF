@@ -50,16 +50,10 @@ axios: https://axios-http.com/
 
 
 # Screenshots
-![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Main.png?raw=true)
+<img width="743" height="214" alt="image" src="https://github.com/user-attachments/assets/a9a88a7b-d993-4e32-b326-f823fa38ce32" />
 
-##### Country info panel
-![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_Panel.png?raw=true)
 
-##### Different configurations
-![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/CountryPicker_feats.gif?raw=true)
 
-##### Languages
-![alt text](https://github.com/drivardxrm/CountryPicker.PCF/blob/master/images/country_picker_lang.gif?raw=true)
 
 
 # Installation
